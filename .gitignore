@@ -1,5 +1,6 @@
 /build/
 .settings/
-.classpath
 .project
+.sringBeans
 bin/
+target/
