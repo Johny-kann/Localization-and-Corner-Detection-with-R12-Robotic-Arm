@@ -1,13 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.web.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.StackPane?>
 
-
-<StackPane prefHeight="410.0" prefWidth="409.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="edu.fit.cs.robotics.controller.gui.BaseController">
+<StackPane prefHeight="543.0" prefWidth="653.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.fit.cs.robotics.controller.gui.BaseController">
    <children>
-      <Button mnemonicParsing="false" text="Button" />
+      <GridPane>
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="506.0" minWidth="10.0" prefWidth="96.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="506.0" minWidth="10.0" prefWidth="104.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="346.0" minWidth="10.0" prefWidth="215.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="346.0" minWidth="10.0" prefWidth="254.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints maxHeight="271.0" minHeight="10.0" prefHeight="111.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="271.0" minHeight="10.0" prefHeight="110.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="271.0" minHeight="10.0" prefHeight="98.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="271.0" minHeight="10.0" prefHeight="96.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="175.0" minHeight="10.0" prefHeight="82.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="126.0" minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <WebView fx:id="browser" prefHeight="205.0" prefWidth="240.0" GridPane.columnIndex="3" GridPane.rowSpan="2" />
+            <Button fx:id="input" mnemonicParsing="false" text="Button" GridPane.columnIndex="1" />
+            <Button fx:id="input2" mnemonicParsing="false" text="Button" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+         </children>
+      </GridPane>
    </children>
 </StackPane>

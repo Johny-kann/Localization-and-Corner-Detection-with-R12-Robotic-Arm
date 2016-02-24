@@ -90,10 +90,10 @@ static int count = 0;
 		return robot;
 	}
 	
-	void moveToFrontTOPMiddle()
+	public String moveToFrontTOPMiddle()
 	{
 	//	00 -2251 -500 -1500
-		robot.moveTo(Constants.FRONT_WRIST, Constants.FRONT_HAND, -2251, -500, 100);
+		return robot.moveTo(Constants.FRONT_WRIST, Constants.FRONT_HAND, -2251, -500, 100);
 	}
 	
 	void moveToTopTOPMiddle()

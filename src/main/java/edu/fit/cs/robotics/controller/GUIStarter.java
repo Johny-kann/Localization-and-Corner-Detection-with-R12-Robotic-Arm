@@ -35,8 +35,9 @@ public class GUIStarter extends Application {
 
 //			WrapperController 
 //			BlendController 
-			BaseController 
-			test = fxmlLoader.getController();
+			BaseController test = fxmlLoader.getController();
+			
+			
 		
 			Scene scene = new Scene(root2,800,600,true);
 		
