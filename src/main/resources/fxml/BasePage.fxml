@@ -10,10 +10,10 @@
    <children>
       <GridPane>
         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="506.0" minWidth="10.0" prefWidth="96.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="506.0" minWidth="10.0" prefWidth="85.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="346.0" minWidth="10.0" prefWidth="90.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="506.0" minWidth="10.0" prefWidth="104.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="346.0" minWidth="10.0" prefWidth="215.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="346.0" minWidth="10.0" prefWidth="254.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="374.0" minWidth="10.0" prefWidth="374.0" />
         </columnConstraints>
         <rowConstraints>
             <RowConstraints maxHeight="271.0" minHeight="10.0" prefHeight="111.0" vgrow="SOMETIMES" />
@@ -25,8 +25,17 @@
         </rowConstraints>
          <children>
             <WebView fx:id="browser" prefHeight="205.0" prefWidth="240.0" GridPane.columnIndex="3" GridPane.rowSpan="2" />
-            <Button fx:id="input" mnemonicParsing="false" text="Button" GridPane.columnIndex="1" />
-            <Button fx:id="input2" mnemonicParsing="false" text="Button" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Button fx:id="input" mnemonicParsing="false" text="Button" GridPane.columnIndex="2" />
+            <Button fx:id="input2" mnemonicParsing="false" text="Button" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <Button fx:id="home" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Home" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+            <Button fx:id="rightBut" mnemonicParsing="false" text="Right" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+            <Button fx:id="frontBut" mnemonicParsing="false" text="Front" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+            <Button fx:id="leftBut" mnemonicParsing="false" text="Left" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+            <Button fx:id="bckBut" mnemonicParsing="false" text="Back" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+            <Button fx:id="upBut" mnemonicParsing="false" text="Up" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+            <Button fx:id="dwnBut" mnemonicParsing="false" text="Down" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+            <TextField fx:id="stepText" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+            <Label fx:id="alertLabel" text="Label" />
          </children>
       </GridPane>
    </children>

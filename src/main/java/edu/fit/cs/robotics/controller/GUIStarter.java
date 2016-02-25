@@ -28,13 +28,8 @@ public class GUIStarter extends Application {
 			
 			fxmlLoader.setBuilderFactory(new JavaFXBuilderFactory());
 			
-	//		new LogsImage();
-			
 			StackPane root2 =  fxmlLoader.load(location.openStream());
-			
-
-//			WrapperController 
-//			BlendController 
+	
 			BaseController test = fxmlLoader.getController();
 			
 			
@@ -42,6 +37,7 @@ public class GUIStarter extends Application {
 			Scene scene = new Scene(root2,800,600,true);
 		
 			primaryStage.setTitle("Johny's Wrapper");
+
 //			primaryStage.setFullScreen(true);
 		
 			
@@ -52,6 +48,8 @@ public class GUIStarter extends Application {
 			primaryStage.setScene(scene);
 			
 			primaryStage.show();
+			
+			
 			
 		} catch(Exception e) {
 			e.printStackTrace();
