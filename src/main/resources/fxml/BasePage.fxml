@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.scene.web.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
@@ -18,10 +19,11 @@
         <rowConstraints>
             <RowConstraints maxHeight="271.0" minHeight="10.0" prefHeight="111.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="271.0" minHeight="10.0" prefHeight="110.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="271.0" minHeight="10.0" prefHeight="98.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="271.0" minHeight="10.0" prefHeight="96.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="271.0" minHeight="10.0" prefHeight="99.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="271.0" minHeight="10.0" prefHeight="78.0" vgrow="SOMETIMES" />
           <RowConstraints maxHeight="175.0" minHeight="10.0" prefHeight="82.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="126.0" minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="126.0" minHeight="10.0" prefHeight="74.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="126.0" minHeight="10.0" prefHeight="31.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <WebView fx:id="browser" prefHeight="205.0" prefWidth="240.0" GridPane.columnIndex="3" GridPane.rowSpan="2" />
@@ -36,6 +38,38 @@
             <Button fx:id="dwnBut" mnemonicParsing="false" text="Down" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
             <TextField fx:id="stepText" GridPane.columnIndex="2" GridPane.rowIndex="5" />
             <Label fx:id="alertLabel" text="Label" />
+            <ComboBox fx:id="personSelect" editable="true" prefWidth="150.0" promptText="select" GridPane.columnIndex="1" />
+            <GridPane GridPane.columnIndex="3" GridPane.rowIndex="3" GridPane.rowSpan="3">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="226.0" minWidth="10.0" prefWidth="39.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="341.0" minWidth="10.0" prefWidth="305.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="341.0" minWidth="10.0" prefWidth="36.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="74.0" minHeight="10.0" prefHeight="36.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="151.0" minHeight="10.0" prefHeight="151.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <ImageView fx:id="cameraPort" fitHeight="150.0" fitWidth="303.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="SOMETIMES" />
+                  <Button fx:id="captureButton" mnemonicParsing="false" text="Capture" GridPane.columnIndex="1" />
+               </children>
+            </GridPane>
+            <FlowPane hgap="10.0" prefHeight="25.0" prefWidth="140.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="6">
+               <children>
+                  <Label text="current" />
+                  <Label text="wrist" />
+                  <Label text="value" />
+                  <Label text="twist" />
+                  <Label text="value" />
+                  <Label text="posX" />
+                  <Label text="xvalue" />
+                  <Label text="posy" />
+                  <Label text="yvalue" />
+                  <Label text="posz" />
+                  <Label text="zvalue" />
+               </children>
+            </FlowPane>
          </children>
       </GridPane>
    </children>

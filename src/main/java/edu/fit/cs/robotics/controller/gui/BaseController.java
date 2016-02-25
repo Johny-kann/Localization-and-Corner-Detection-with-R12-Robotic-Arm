@@ -1,13 +1,20 @@
 package edu.fit.cs.robotics.controller.gui;
 
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 
+import edu.fit.cs.robotics.constants.Constants;
 import edu.fit.cs.robotics.controller.RoboticsOperator;
 import edu.fit.cs.robotics.threads.MyService;
 import edu.fit.cs.robotics.threads.ServiceHTTP;
 import edu.fit.cs.robotics.threads.ServiceTask;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
@@ -15,8 +22,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.web.WebView;
 import javafx.util.Callback;
 
@@ -24,6 +33,9 @@ public class BaseController {
 	
 	private RoboticsOperator robotController;
 
+	@FXML
+    private ComboBox<String> personSelect;
+	
 	@FXML
     private WebView browser;
 	
@@ -53,6 +65,13 @@ public class BaseController {
 
 	 @FXML
 	 private Button bckBut;
+	 
+	 @FXML
+    private Button captureButton;
+	 
+	  @FXML
+	  private ImageView cameraPort;
+
 
 	 @FXML
 	 private TextField stepText;
@@ -69,14 +88,30 @@ public class BaseController {
 		
 //		service = new MyService();
 		
+		personSelect.getItems().add("Johny");
+		personSelect.getItems().add("Jeff");
+		personSelect.getItems().add("Murali");
+				
+	/*	personSelect.onActionProperty().addListener(
+				new ChangeListener<String>() {
+
+					@Override
+					public void changed(ObservableValue<? extends String> observable, String oldValue,
+							String newValue) {
+						// TODO Auto-generated method stub
+						
+					}
+		});
+		*/
+		
 		service = new ServiceTask<String>();
 		
 		
 		
-		alertLabel.textProperty().bind(
+	/*	alertLabel.textProperty().bind(
 				service.messageProperty()
 				);
-		
+		*/
 		
 		robotController = new RoboticsOperator();
 		
@@ -112,6 +147,34 @@ public class BaseController {
 	
 	void initActions()
 	{
+		
+		captureButton.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				robotController.getCamera();
+				cameraPort.setImage(robotController.getArm().getLastImage());
+				
+			}
+		});
+		
+		personSelect.valueProperty().addListener(new ChangeListener<String>() {
+            @Override 
+            public void changed(ObservableValue ov, String t, String t1) {                
+               if(t1.equalsIgnoreCase("Johny"))
+            	   Constants.PASSWORD = Constants.JOHNY_PASS;
+               
+               else if(t1.equalsIgnoreCase("Jeff"))
+            	   Constants.PASSWORD = Constants.JEFFER_PASS;
+               
+               else if(t1.equalsIgnoreCase("Murali"))
+            	   Constants.PASSWORD = Constants.MURALI_PASS;
+               
+               System.out.println(Constants.PASSWORD);
+            }    
+        });
+		
+		
 		input.setOnAction(new EventHandler<ActionEvent>() {
 			
 			@Override
@@ -153,7 +216,7 @@ public class BaseController {
 			public void handle(ActionEvent event) {
 			//	System.out.println("Button pressed");
 				
-				alertLabel.setText("Progressing");
+			//	alertLabel.setText("Progressing");
 				String url  = robotController.getArm().home();
 //				System.out.println(url);
 				
@@ -213,7 +276,7 @@ public class BaseController {
 				int step = Integer.parseInt(stepText.getText());
 				
 				alertLabel.setText("Progressing");
-				disBrows(robotController.getArm().addX(-step));
+				disBrows(robotController.getArm().addY(-step));
 				
 			}
 		});
@@ -226,7 +289,7 @@ public class BaseController {
 				int step = Integer.parseInt(stepText.getText());
 				
 				alertLabel.setText("Progressing");
-				disBrows(robotController.getArm().addX(step));
+				disBrows(robotController.getArm().addY(step));
 				
 			}
 		});
@@ -239,7 +302,7 @@ public class BaseController {
 				int step = Integer.parseInt(stepText.getText());
 				
 				alertLabel.setText("Progressing");
-				disBrows(robotController.getArm().addY(step));
+				disBrows(robotController.getArm().addX(step));
 				
 			}
 		});
@@ -252,7 +315,7 @@ public class BaseController {
 				int step = Integer.parseInt(stepText.getText());
 			
 				alertLabel.setText("Progressing");
-				disBrows(robotController.getArm().addY(-step));
+				disBrows(robotController.getArm().addX(-step));
 				
 			}
 		});
@@ -270,6 +333,12 @@ public class BaseController {
 		else
 			alertLabel.setText("Moved");
 		browser.getEngine().loadContent(content);
+		
+		System.out.println(content);
+		
+		
+		
+		
 	}
 	
 	
