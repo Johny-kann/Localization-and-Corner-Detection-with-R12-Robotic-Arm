@@ -1,100 +1,210 @@
 package edu.fit.cs.robotics.model;
 
+import edu.fit.cs.robotics.BO.ContentAnalyser;
 import edu.fit.cs.robotics.clients.StockClients;
 import edu.fit.cs.robotics.constants.Constants;
 import javafx.scene.image.Image;
 
+
+
 public class RobotArm {
 	
 	public StockClients restClient; 
-	int posX,posY,posZ,handTwist,wrist;
+	private ContentAnalyser logic;
+	
+	boolean last_issued_command_success;
+	
+	String last_command;
+	
+	MoveToARM moveTo , current_MoveTo;
+	
+	AJMA ajma, current_AJMA;
+	
+	JMA jma, current_JMA;
+
+	enum comType {MOVETO,AJMA,JMA,HOME,CAPTURE};
+	
+	//public 
 	
 	public RobotArm()
 	{
 		restClient = new StockClients();
-		posZ = 5000;
+		logic = new ContentAnalyser();
+		
+		moveTo = new MoveToARM();
+		ajma = new AJMA();
+		jma = new JMA();
+		
+		current_MoveTo = new MoveToARM();
+		current_AJMA = new AJMA();
+		current_JMA = new JMA();
+		
+		
+		moveTo.setEverything(0, 0, 0, 0, 5000);
+		
+		last_issued_command_success = false;
+		
+/*		posZ = 5000;
 		posX = 0;
 		posY = 0;
 		handTwist = 0;
 		wrist = 0;
+		*/
 		
 	}
 
-	private String constructCommand()
+	private String constructMoveToCommand()
 	{
-		return handTwist+" "+wrist+" "+posX+" "+posY+" "+posZ+" TMOVETO"; 
+		return moveTo.handTwist+" "+ moveTo.wrist+" "+ moveTo.posX+" "+ moveTo.posY+" "+ moveTo.posZ+" TMOVETO"; 
 	}
 	
-	private String issueCommand()
+	private String constructAJMACommand()
 	{
-		return restClient.commandRobot(constructCommand());
+		return ajma.handAngle+" "+ ajma.wristAngle+" "+ ajma.elbowAngle+" "+ ajma.shoulderAngle+" "+ ajma.waistAngle+" AJMA";
+	}
+	
+	private String constructJMACommand()
+	{
+		return jma.handSteps+" "+ jma.wristSteps+" "+ jma.elbowSteps+" "+ jma.shoulderSteps+" "+ jma.waistSteps+" JMA";
+	}
+	
+	private String sendCommandHTTP(String command,comType type)
+	{
+		String response = restClient.commandRobot(command);
+		
+		if(logic.commandSuccess(response))
+		{	
+			this.last_issued_command_success = true;
+			this.last_command = logic.commanIssued(response);
+			
+			this.jma = logic.getEquivalentJMA(response);
+			this.current_JMA = this.jma;
+			
+			if(type == comType.MOVETO)
+			{
+				this.current_MoveTo = this.moveTo;
+				this.ajma = logic.getAJMAFromJMA(current_JMA);
+				this.current_AJMA = this.ajma;
+			}
+			
+			else if(type == comType.AJMA)
+			{
+				this.current_AJMA = this.ajma;
+				MoveToARM pt = logic.getEquivalentMoveTo(response);
+				this.moveTo.posX = pt.posX;
+				this.moveTo.posY = pt.posY;
+				this.moveTo.posZ = pt.posZ;
+				this.current_MoveTo = this.moveTo;
+			}
+			
+			else if(type == comType.HOME)
+			{
+				this.moveTo.setEverything(0, 0, 0, 0, 5000);
+				this.current_MoveTo = moveTo;
+				
+				this.ajma.set(0, 0, 0, 0, 0);
+				this.current_AJMA = ajma;
+			}
+			
+			
+		}
+		else
+		{
+			this.last_issued_command_success = false;
+			
+			if(type == comType.MOVETO)
+			{
+				this.current_MoveTo = this.moveTo;
+			}
+			else if(type == comType.AJMA)
+			{
+				this.current_AJMA = this.ajma;
+			}
+			
+		}
+		
+		return response;
+	}
+	
+	private String issueCommand(comType type)
+	{
+		if(type == comType.MOVETO)
+		return sendCommandHTTP(constructMoveToCommand(),type);
+		
+		else if(type == comType.AJMA)
+			return sendCommandHTTP(constructAJMACommand(),type);
+		
+		else if(type == comType.JMA)
+			return sendCommandHTTP(constructJMACommand(),type);
+			
+		return null;
 	}
 	
 	public String Capture(int num)
 	{
-		return restClient.commandRobot(num+" CAPTURE");
+		 return sendCommandHTTP(num+" CAPTURE",comType.CAPTURE);
+		//return restClient.commandRobot(num+" CAPTURE");
 	}
 	
 	public String addPoint(int stepX, int stepY,int stepZ)
 	{
-		posX += stepX;
-		posY += stepY;
-		posZ += stepZ;
+		moveTo.posX += stepX;
+		moveTo.posY += stepY;
+		moveTo.posZ += stepZ;
 		
-		return issueCommand();
+		return issueCommand(comType.MOVETO);
 	}
 	
 	public String addX(int step)
 	{
-		posX += step;
-		return issueCommand();
+		moveTo.posX += step;
+		return issueCommand(comType.MOVETO);
 	}
 	
 	public String addY(int step)
 	{
-		posY += step;
-		return issueCommand();
+		moveTo.posY += step;
+		return issueCommand(comType.MOVETO);
 	}
 	
 	public String addZ(int step)
 	{
-		posZ += step;
-		return issueCommand();
+		moveTo.posZ += step;
+		return issueCommand(comType.MOVETO);
 	}
 	
 	public String moveWrist(int step)
 	{
-		wrist += step;
-		return issueCommand();
+		moveTo.wrist += step;
+		return issueCommand(comType.MOVETO);
 	}
 	
 	public String moveTwist(int step)
 	{
-		handTwist += step;
-		return issueCommand();
+		moveTo.handTwist += step;
+		return issueCommand(comType.MOVETO);
 	}
 	
 	public String moveTo(int posX,int posY,int posZ)
 	{
-		return moveTo(handTwist, wrist, posX, posY, posZ);
+		return moveTo(moveTo.handTwist, moveTo.wrist, posX, posY, posZ);
 	}
 	
 	public String moveTo(int handTwist, int wrist, int posX,int posY,int posZ)
 	{
-		this.handTwist = handTwist;
-		this.wrist = wrist;
-		this.posX = posX;
-		this.posY = posY;
-		this.posZ = posZ;
+		moveTo.handTwist = handTwist;
+		moveTo.wrist = wrist;
+		moveTo.posX = posX;
+		moveTo.posY = posY;
+		moveTo.posZ = posZ;
 		
-	//			System.out.println("Command Given "+str);
-		return issueCommand();
+		return issueCommand(comType.MOVETO);
 	}
 	
 	public String home()
 	{
-		
-		return restClient.commandRobot("HOME");
+		 return sendCommandHTTP("HOME",comType.HOME);
+//		return restClient.commandRobot("HOME");
 	}
 	
 	public Image getLastImage()
