@@ -2,6 +2,7 @@ package edu.fit.cs.robotics.controller;
 
 import java.net.URL;
 
+import edu.fit.cs.robotics.constants.FXMLConstants;
 import edu.fit.cs.robotics.controller.gui.BaseController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -20,7 +21,7 @@ public class GUIStarter extends Application {
 			
 			loader.setBuilderFactory(new JavaFXBuilderFactory());
 			
-			URL location = getClass().getResource("/fxml/BasePage.fxml");
+			URL location = getClass().getResource(FXMLConstants.BASE_FXML);
 		
 			FXMLLoader fxmlLoader = new FXMLLoader();
 			

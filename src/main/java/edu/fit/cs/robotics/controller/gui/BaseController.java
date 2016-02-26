@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 
+import edu.fit.cs.robotics.BO.RobotLogics;
 import edu.fit.cs.robotics.constants.Constants;
 import edu.fit.cs.robotics.controller.RoboticsOperator;
 import edu.fit.cs.robotics.threads.MyService;
@@ -31,7 +32,7 @@ import javafx.util.Callback;
 
 public class BaseController {
 	
-	private RoboticsOperator robotController;
+	RoboticsOperator robotController;
 
 	@FXML
     private ComboBox<String> personSelect;
@@ -45,27 +46,6 @@ public class BaseController {
 	@FXML
 	private Button input2;
 	
-	@FXML
-	private Button home;
-	
-	 @FXML
-	 private Button upBut;
-
-	 @FXML
-	 private Button dwnBut;
-
-	 @FXML
-	 private Button rightBut;
-
-	 @FXML
-	 private Button frontBut;
-	 
-	 @FXML
-	 private Button leftBut;
-
-	 @FXML
-	 private Button bckBut;
-	 
 	 @FXML
     private Button captureButton;
 	 
@@ -77,12 +57,29 @@ public class BaseController {
 	 private TextField stepText;
 	 
 	 @FXML
-	 private Label alertLabel;
+	 Label alertLabel;
 	 
-	 private ServiceTask<String> service;
+	 @FXML
+	 private Label labZMov;
+	 
+	 @FXML
+	 private Label labWristMov;
+	 
+	 @FXML
+	 private Label labHandMov;
+	 
+	 @FXML
+	 private Label labXMov;
+
+	 @FXML
+	 private Label labYMov;
+	 
+	 ServiceTask<String> service;
 	
 	@FXML
     void initialize() {
+		
+		Navigator.baseControl = this;
     	
   //  	WrapperNavigator.wrapper = this;
 		
@@ -92,19 +89,9 @@ public class BaseController {
 		personSelect.getItems().add("Jeff");
 		personSelect.getItems().add("Murali");
 				
-	/*	personSelect.onActionProperty().addListener(
-				new ChangeListener<String>() {
-
-					@Override
-					public void changed(ObservableValue<? extends String> observable, String oldValue,
-							String newValue) {
-						// TODO Auto-generated method stub
-						
-					}
-		});
-		*/
+	
 		
-		service = new ServiceTask<String>();
+		
 		
 		
 		
@@ -115,35 +102,37 @@ public class BaseController {
 		
 		robotController = new RoboticsOperator();
 		
+		initService();
 		initActions();
 		
 		
-		service.setMytask(new Task<String>() {
-
-			@Override
-			protected String call() throws Exception {
-				
-				this.updateMessage("Going");
-				
-				for(int i=0;i<1000;i++)
-				{
-					Thread.sleep(10);
-					this.updateMessage(i+"");
-				}
-				
-				this.updateMessage("Done");
-				
-				return "Done";
-			}
-		});
+		
     	
     }
+	
+	void initService()
+	{
+		service = new ServiceTask<String>();
+		
+		service.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+			
+			@Override
+			public void handle(WorkerStateEvent event) {
+			
+				disBrows(service.getValue());
+				
+			}
+		});
+	}
 	
 	
 	void callMe()
 	{
 		alertLabel.setText("Mudinjan Da");
+		
+		
 	}
+	
 	
 	void initActions()
 	{
@@ -169,9 +158,10 @@ public class BaseController {
                
                else if(t1.equalsIgnoreCase("Murali"))
             	   Constants.PASSWORD = Constants.MURALI_PASS;
+              
+               Constants.commandURLMaker();
                
-               System.out.println(Constants.PASSWORD);
-            }    
+              }    
         });
 		
 		
@@ -180,12 +170,6 @@ public class BaseController {
 			@Override
 			public void handle(ActionEvent event) {
 				
-		//		System.out.println("Button Pressed");
-				
-				
-				service.start();
-				
-	//			System.out.println(service.getMessage());
 			}
 		});
 		
@@ -193,134 +177,10 @@ public class BaseController {
 			
 			@Override
 			public void handle(ActionEvent event) {
-			//	System.out.println("Button pressed");
-				
-//				alertLabel.setText("Progressing");
-//				String url  = robotController.moveToFrontTOPMiddle();
-//				System.out.println(url);
-				
-				
-
 				System.out.println(service.getValue());
-//				disBrows(url);
-				
-				
-//				browser.getEngine().loadContent(url);
 								
 			}
 		});
-		
-		home.setOnAction(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent event) {
-			//	System.out.println("Button pressed");
-				
-			//	alertLabel.setText("Progressing");
-				String url  = robotController.getArm().home();
-//				System.out.println(url);
-				
-				
-				disBrows(url);
-				
-//				browser.getEngine().loadContent(url);
-				Service<String> service = new Service<String>() {
-
-					@Override
-					protected Task<String> createTask() {
-						// TODO Auto-generated method stub
-						return null;
-					}
-					
-				};
-				
-			
-				
-			}
-		});
-		
-		upBut.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent event) {
-				// TODO Auto-generated method stub
-				int step = Integer.parseInt(stepText.getText());
-				
-				alertLabel.setText("Progressing");
-				disBrows(robotController.getArm().addZ(step));
-				
-			}
-		});
-		
-		
-		dwnBut.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent event) {
-				// TODO Auto-generated method stub
-				
-				alertLabel.setText("Progressing");
-				int step = Integer.parseInt(stepText.getText());
-				
-				
-				disBrows(robotController.getArm().addZ(-step));
-				
-			}
-		});
-		
-		leftBut.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent event) {
-				// TODO Auto-generated method stub
-				int step = Integer.parseInt(stepText.getText());
-				
-				alertLabel.setText("Progressing");
-				disBrows(robotController.getArm().addY(-step));
-				
-			}
-		});
-		
-		rightBut.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent event) {
-				// TODO Auto-generated method stub
-				int step = Integer.parseInt(stepText.getText());
-				
-				alertLabel.setText("Progressing");
-				disBrows(robotController.getArm().addY(step));
-				
-			}
-		});
-		
-		frontBut.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent event) {
-				// TODO Auto-generated method stub
-				int step = Integer.parseInt(stepText.getText());
-				
-				alertLabel.setText("Progressing");
-				disBrows(robotController.getArm().addX(step));
-				
-			}
-		});
-		
-		bckBut.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent event) {
-				// TODO Auto-generated method stub
-				int step = Integer.parseInt(stepText.getText());
-			
-				alertLabel.setText("Progressing");
-				disBrows(robotController.getArm().addX(-step));
-				
-			}
-		});
-
-
 		
 
 		
@@ -328,17 +188,29 @@ public class BaseController {
 	
 	void disBrows(String content)
 	{
-		if(content.contains("CAPTURE DONE")||content.contains("Cannot reach out"))
-			alertLabel.setText("Captured");
-		else
+	//	if(content.contains("CAPTURE DONE")||content.contains("Cannot reach out"))
+		if(robotController.getArm().last_issued_command_success)
 			alertLabel.setText("Moved");
+		else
+			alertLabel.setText("Captured");
+		
 		browser.getEngine().loadContent(content);
 		
 		System.out.println(content);
 		
 		
+		upDateTail();
 		
 		
+	}
+	
+	void upDateTail()
+	{
+		labHandMov.setText(robotController.getArm().current_MoveTo.handTwist+"");
+		labWristMov.setText(robotController.getArm().current_MoveTo.wrist+"");
+		labXMov.setText(robotController.getArm().current_MoveTo.posX+"");
+		labYMov.setText(robotController.getArm().current_MoveTo.posY+"");
+		labZMov.setText(robotController.getArm().current_MoveTo.posZ+"");
 	}
 	
 	

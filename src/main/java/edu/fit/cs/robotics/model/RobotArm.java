@@ -12,15 +12,15 @@ public class RobotArm {
 	public StockClients restClient; 
 	private ContentAnalyser logic;
 	
-	boolean last_issued_command_success;
+	public boolean last_issued_command_success;
 	
 	String last_command;
 	
-	MoveToARM moveTo , current_MoveTo;
+	public MoveToARM moveTo , current_MoveTo;
 	
-	AJMA ajma, current_AJMA;
+	public AJMA ajma, current_AJMA;
 	
-	JMA jma, current_JMA;
+	public JMA jma, current_JMA;
 
 	enum comType {MOVETO,AJMA,JMA,HOME,CAPTURE};
 	
@@ -41,6 +41,10 @@ public class RobotArm {
 		
 		
 		moveTo.setEverything(0, 0, 0, 0, 5000);
+		current_MoveTo.setEverything(0, 0, 0, 0, 5000);
+		
+		current_AJMA.set(0, 0, 0, 0, 0);
+		
 		
 		last_issued_command_success = false;
 		
@@ -78,13 +82,15 @@ public class RobotArm {
 			this.last_command = logic.commanIssued(response);
 			
 			this.jma = logic.getEquivalentJMA(response);
-			this.current_JMA = this.jma;
+		
+			this.current_JMA.copy(jma);
 			
 			if(type == comType.MOVETO)
 			{
 				this.current_MoveTo = this.moveTo;
 				this.ajma = logic.getAJMAFromJMA(current_JMA);
-				this.current_AJMA = this.ajma;
+			
+				this.current_AJMA.copy(ajma);
 			}
 			
 			else if(type == comType.AJMA)
@@ -94,7 +100,8 @@ public class RobotArm {
 				this.moveTo.posX = pt.posX;
 				this.moveTo.posY = pt.posY;
 				this.moveTo.posZ = pt.posZ;
-				this.current_MoveTo = this.moveTo;
+			
+				this.current_MoveTo.copy(moveTo);
 			}
 			
 			else if(type == comType.HOME)
@@ -103,22 +110,28 @@ public class RobotArm {
 				this.current_MoveTo = moveTo;
 				
 				this.ajma.set(0, 0, 0, 0, 0);
-				this.current_AJMA = ajma;
+				this.current_AJMA.copy(ajma);
 			}
 			
 			
 		}
+		
 		else
 		{
 			this.last_issued_command_success = false;
+	//		System.out.println("False");
 			
 			if(type == comType.MOVETO)
 			{
-				this.current_MoveTo = this.moveTo;
+				this.moveTo.copy(current_MoveTo); 
 			}
 			else if(type == comType.AJMA)
 			{
-				this.current_AJMA = this.ajma;
+				 this.ajma.copy(current_AJMA);
+			}
+			else if(type == comType.HOME)
+			{
+				 this.ajma.copy(current_AJMA);
 			}
 			
 		}
@@ -145,6 +158,58 @@ public class RobotArm {
 		 return sendCommandHTTP(num+" CAPTURE",comType.CAPTURE);
 		//return restClient.commandRobot(num+" CAPTURE");
 	}
+	
+	public String ajmaMove(int handAngle, int wristAngle, int elbowAngle, int shoulderAngle, int waistAngle)
+	{
+		ajma.set(handAngle, wristAngle, elbowAngle, shoulderAngle, waistAngle);
+		
+		return issueCommand(comType.AJMA);
+	}
+	
+	public String ajmaAdd(int elbowAngle, int shoulderAngle, int waistAngle)
+	{
+		ajma.elbowAngle = elbowAngle;
+		ajma.shoulderAngle = shoulderAngle;
+		ajma.waistAngle = waistAngle;
+		
+		return issueCommand(comType.AJMA);
+	}
+	
+	public String ajmaHandAdd(int handAngle)
+	{
+		ajma.handAngle=+handAngle;
+		
+		return issueCommand(comType.AJMA);
+	}
+	
+	public String ajmaWristAdd(int wristAngle)
+	{
+		ajma.wristAngle+=wristAngle;
+		
+		return issueCommand(comType.AJMA);
+	}
+	
+	public String ajmaElbowAdd(int elbAngle)
+	{
+		ajma.elbowAngle+=elbAngle;
+		
+		return issueCommand(comType.AJMA);
+	}
+	
+	public String ajmaShoulderAdd(int shoulerAngle)
+	{
+		ajma.shoulderAngle+=shoulerAngle;
+		
+		return issueCommand(comType.AJMA);
+	}
+	
+	public String ajmaWaistAdd(int waistAngle)
+	{
+		ajma.waistAngle+=waistAngle;
+		
+		return issueCommand(comType.AJMA);
+	}
+
 	
 	public String addPoint(int stepX, int stepY,int stepZ)
 	{
@@ -173,13 +238,13 @@ public class RobotArm {
 		return issueCommand(comType.MOVETO);
 	}
 	
-	public String moveWrist(int step)
+	public String addWrist(int step)
 	{
 		moveTo.wrist += step;
 		return issueCommand(comType.MOVETO);
 	}
 	
-	public String moveTwist(int step)
+	public String addTwist(int step)
 	{
 		moveTo.handTwist += step;
 		return issueCommand(comType.MOVETO);

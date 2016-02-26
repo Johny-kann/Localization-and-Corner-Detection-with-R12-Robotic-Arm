@@ -4,6 +4,11 @@ public class MoveToARM {
 
 public int posX,posY,posZ,handTwist,wrist;
 	
+	public void copy(MoveToARM point)
+	{
+		setEverything(point.handTwist, point.wrist, point.posX, point.posY, point.posZ);
+	}
+
 	public void setPos(int posX,int posY,int posZ)
 	{
 		this.posX = posX;

@@ -18,5 +18,9 @@ public class ServiceTask<V> extends Service<V> {
 		// TODO Auto-generated method stub
 		return mytask;
 	}
-
+	
+	@Override
+	protected void succeeded() {
+	    reset();
+	}
 }

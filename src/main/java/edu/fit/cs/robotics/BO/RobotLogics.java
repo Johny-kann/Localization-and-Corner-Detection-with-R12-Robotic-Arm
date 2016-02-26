@@ -11,6 +11,10 @@ import javafx.scene.image.Image;
 import javax.imageio.ImageIO;
 
 
+
+import edu.fit.cs.robotics.constants.Constants;
+
+
 /**
  * Class for implementing the Business logic for Stock Controller
  * 
@@ -18,6 +22,9 @@ import javax.imageio.ImageIO;
  *
  */
 public class RobotLogics {
+	
+	
+	
 	
 	public static boolean writeImagePng(String fileLoc,Image image)
 	{

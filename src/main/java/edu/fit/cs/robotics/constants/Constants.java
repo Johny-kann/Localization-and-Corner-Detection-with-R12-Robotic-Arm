@@ -1,5 +1,6 @@
 package edu.fit.cs.robotics.constants;
 
+import edu.fit.cs.robotics.BO.RobotLogics;
 import javafx.geometry.Point3D;
 
 public class Constants {
@@ -66,4 +67,10 @@ public class Constants {
 	
 	
 
+	public static void commandURLMaker()
+	{
+		Constants.COMMAND_URL =  Constants.BASE_URL+"robot.php?o=369&m=Y&p="+Constants.PASSWORD+"&c=";
+	}
+	
+	
 	}

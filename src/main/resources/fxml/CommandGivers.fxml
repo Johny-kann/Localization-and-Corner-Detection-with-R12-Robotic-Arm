@@ -5,8 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.StackPane?>
 
-
-<StackPane prefHeight="270.0" prefWidth="441.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="edu.fit.cs.robotics.controller.gui.CommandController">
+<StackPane prefHeight="270.0" prefWidth="441.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.fit.cs.robotics.controller.gui.CommandController">
    <children>
       <BorderPane prefHeight="200.0" prefWidth="200.0">
          <left>
@@ -16,7 +15,10 @@
             <Button fx:id="right" mnemonicParsing="false" text="&gt;" BorderPane.alignment="CENTER" />
          </right>
          <center>
-            <StackPane fx:id="centerPane" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+            <StackPane fx:id="centerPane" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <fx:include source="moveToController.fxml" />
+               </children></StackPane>
          </center>
       </BorderPane>
    </children>
