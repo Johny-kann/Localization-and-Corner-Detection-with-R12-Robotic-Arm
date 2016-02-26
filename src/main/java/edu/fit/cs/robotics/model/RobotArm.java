@@ -81,14 +81,14 @@ public class RobotArm {
 			this.last_issued_command_success = true;
 			this.last_command = logic.commanIssued(response);
 			
-			this.jma = logic.getEquivalentJMA(response);
+			this.jma.copy(logic.getEquivalentJMA(response));
 		
 			this.current_JMA.copy(jma);
 			
 			if(type == comType.MOVETO)
 			{
-				this.current_MoveTo = this.moveTo;
-				this.ajma = logic.getAJMAFromJMA(current_JMA);
+				this.current_MoveTo.copy(this.moveTo);
+				this.ajma.copy(logic.getAJMAFromJMA(current_JMA));
 			
 				this.current_AJMA.copy(ajma);
 			}
@@ -177,7 +177,7 @@ public class RobotArm {
 	
 	public String ajmaHandAdd(int handAngle)
 	{
-		ajma.handAngle=+handAngle;
+		ajma.handAngle+=handAngle;
 		
 		return issueCommand(comType.AJMA);
 	}

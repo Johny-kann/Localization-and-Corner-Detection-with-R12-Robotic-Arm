@@ -8,17 +8,26 @@ import java.io.OutputStream;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 
+import javax.annotation.processing.ProcessingEnvironment;
+
 import edu.fit.cs.robotics.BO.RobotLogics;
 import edu.fit.cs.robotics.constants.Constants;
 import edu.fit.cs.robotics.controller.RoboticsOperator;
 import edu.fit.cs.robotics.threads.MyService;
 import edu.fit.cs.robotics.threads.ServiceHTTP;
 import edu.fit.cs.robotics.threads.ServiceTask;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyStringProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
+import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -34,6 +43,27 @@ public class BaseController {
 	
 	RoboticsOperator robotController;
 
+	@FXML
+    private Label imageCount;
+
+    @FXML
+    private Button cameraBut;
+
+    @FXML
+    private Button video1;
+
+    @FXML
+    private Button video2;
+
+    @FXML
+    private Button lastCapture;
+
+    @FXML
+    private Button output;
+    
+    @FXML
+    private Button saveImages;
+	
 	@FXML
     private ComboBox<String> personSelect;
 	
@@ -75,11 +105,27 @@ public class BaseController {
 	 private Label labYMov;
 	 
 	 ServiceTask<String> service;
+	 
+	 @FXML
+	    private Button prevImage;
+
+	 @FXML
+	    private Button nextImage;
+	 
+	 
+	 private int webView = 0;
+	 
+	 private IntegerProperty count;
+	 
+	 private int countt = 0;
+	 
+	 private int Total_images = 0;
 	
 	@FXML
     void initialize() {
 		
 		Navigator.baseControl = this;
+		count = new SimpleIntegerProperty(5);
     	
   //  	WrapperNavigator.wrapper = this;
 		
@@ -134,15 +180,108 @@ public class BaseController {
 	}
 	
 	
+	void initBinds()
+	{
+	//	IntegerProperty test;
+	//	imageCount.textProperty().bind(count.asString());
+		cameraBut.setText("Capture "+Total_images);
+	}
+	
 	void initActions()
 	{
+		
+		saveImages.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				// TODO Auto-generated method stub
+				
+				service.setMytask(new Task<String>() {
+					@Override
+					protected String call() throws Exception {
+			
+						String url = robotController.printPhotos("Camera", countt);
+						return url;
+					}
+				});
+		//		robotController.printPhotos("Camera", countt);
+			service.start();
+			
+				
+			}
+		});
+		
+		video1.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				browser.getEngine().load("http://163.118.78.116:8091/");
+				webView = -1;
+			}
+		});
+		
+		video2.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				browser.getEngine().load("http://163.118.78.116:8081/");
+				webView = 1;
+			}
+		});
+
+		output.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				browser.getEngine().loadContent("Output Response will be loaded");;
+				webView = 0;
+			}
+		});
+
+		
+	
+		prevImage.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				// TODO Auto-generated method stub
+				count.add(-1);
+				countt--;
+				
+				
+				cameraPort.setImage(robotController.getArm().getImageAt(countt));
+
+				imageCount.setText(countt+"");
+				
+			}
+		});
+		
+		nextImage.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				// TODO Auto-generated method stub
+				count.add(1);
+				
+				countt++;
+				
+				cameraPort.setImage(robotController.getArm().getImageAt(countt));
+				
+	//			imageCount.setText(count.asString().get());
+				imageCount.setText(countt+"");
+			}
+		});
+		
 		
 		captureButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
-				robotController.getCamera();
+				
+				robotController.getArm().Capture(Total_images);
 				cameraPort.setImage(robotController.getArm().getLastImage());
+				Total_images++;
+				cameraBut.setText("Capture "+Total_images);
 				
 			}
 		});
@@ -179,7 +318,8 @@ public class BaseController {
 			public void handle(ActionEvent event) {
 				System.out.println(service.getValue());
 								
-			}
+			}	// TODO Auto-generated method stub
+			
 		});
 		
 
@@ -194,6 +334,7 @@ public class BaseController {
 		else
 			alertLabel.setText("Captured");
 		
+		if(webView==0)
 		browser.getEngine().loadContent(content);
 		
 		System.out.println(content);

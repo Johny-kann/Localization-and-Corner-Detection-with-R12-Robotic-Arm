@@ -16,10 +16,21 @@ static int count = 0;
 		
 	}	
 	
+		
 	public void getCamera()
 	{
 		robot.Capture(count);
 		
+	}
+	
+	public String printPhotos(String fileName,int count)
+	{
+		for(int i=1;i<=count;i++)
+		{
+		 new RobotLogics().writeImage(i, robot.getImageAt(i), fileName);
+		}
+		
+		return "Done";
 	}
 	
 	public void printPhotos(String fileName)
@@ -179,21 +190,6 @@ static int count = 0;
 		
 		RoboticsOperator operator = new RoboticsOperator();
 		
-	//	operator.getArm().home();
-		
-//			operator.moveToFrontTOPMiddle();
-	//	Constants.FRONT_WRIST = 1000;
-//		operator.getArm().
-//		moveTo(3000,-8500,-3900, -1450, -100);
-		
-//		operator.getArm().Capture(1688);
-//		;
-//		new RobotLogics().writeImage(1, operator.getArm().getLastImage(), "AImage");
-		
-//		operator.moveToTopTOPMiddle();
-//		operator.getArm().moveTo(Constants.TOP_WRIST, Constants.TOP_HAND, -4450, -1550, -50);
-//		operator.getArm().moveTo(3000,-8500,-3900, -1450, -100);
-		
 		operator.getArm().home();
 		
 		operator.moveToFrontTOPMiddle();
@@ -211,14 +207,6 @@ static int count = 0;
 		
 		operator.getArm().home();
 		
-		operator.printPhotos("Camera");
-		
-		
-//		operator.getArm().moveTo(1500, -2000, 3000);
-//		operator.getArm().addY(-1000);
-//		operator.captureAnyFace();
-//		operator.getArm().home();
-
  
 	}
 
