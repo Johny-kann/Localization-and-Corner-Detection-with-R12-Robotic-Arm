@@ -24,4 +24,9 @@ public int posX,posY,posZ,handTwist,wrist;
 		this.setPos(posX, posY, posZ);
 		
 	}
+	
+	public String getString()
+	{
+		return this.handTwist+" "+wrist+" "+posX+" "+posY+" "+posZ+" MOVETO";
+	}
 }

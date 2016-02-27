@@ -1,5 +1,7 @@
 package edu.fit.cs.robotics.model;
 
+import java.util.StringTokenizer;
+
 import edu.fit.cs.robotics.BO.ContentAnalyser;
 import edu.fit.cs.robotics.clients.StockClients;
 import edu.fit.cs.robotics.constants.Constants;
@@ -14,7 +16,7 @@ public class RobotArm {
 	
 	public boolean last_issued_command_success;
 	
-	String last_command;
+	public String last_command;
 	
 	public MoveToARM moveTo , current_MoveTo;
 	
@@ -43,6 +45,7 @@ public class RobotArm {
 		moveTo.setEverything(0, 0, 0, 0, 5000);
 		current_MoveTo.setEverything(0, 0, 0, 0, 5000);
 		
+		ajma.set(0, 0, 0, 0, 0);
 		current_AJMA.set(0, 0, 0, 0, 0);
 		
 		
@@ -95,7 +98,7 @@ public class RobotArm {
 			
 			else if(type == comType.AJMA)
 			{
-				this.current_AJMA = this.ajma;
+				this.current_AJMA.copy(this.ajma);
 				MoveToARM pt = logic.getEquivalentMoveTo(response);
 				this.moveTo.posX = pt.posX;
 				this.moveTo.posY = pt.posY;
@@ -107,7 +110,7 @@ public class RobotArm {
 			else if(type == comType.HOME)
 			{
 				this.moveTo.setEverything(0, 0, 0, 0, 5000);
-				this.current_MoveTo = moveTo;
+				this.current_MoveTo.copy(moveTo);
 				
 				this.ajma.set(0, 0, 0, 0, 0);
 				this.current_AJMA.copy(ajma);
@@ -137,6 +140,50 @@ public class RobotArm {
 		}
 		
 		return response;
+	}
+	
+	public String issueCommand(String command)
+	{
+		if(command.contains("MOVETO"))
+		{
+			StringTokenizer token = new StringTokenizer(command, " ");
+			
+			moveTo.setEverything(
+					Integer.parseInt(token.nextToken()), 
+					Integer.parseInt(token.nextToken()), 
+					Integer.parseInt(token.nextToken()), 
+					Integer.parseInt(token.nextToken()), 
+					Integer.parseInt(token.nextToken())
+					);
+			return issueCommand(comType.MOVETO);
+			
+		}
+		else if(command.contains("AJMA"))
+		{
+			StringTokenizer token = new StringTokenizer(command, " ");
+			
+			ajma.set(
+					Integer.parseInt(token.nextToken()),
+					Integer.parseInt(token.nextToken()),
+					Integer.parseInt(token.nextToken()),
+					Integer.parseInt(token.nextToken()),
+					Integer.parseInt(token.nextToken())
+					);
+			
+			return issueCommand(comType.AJMA);
+			
+		}
+		else if(command.contains("HOME"))
+		{
+			return home();
+		}else if(command.contains("CAPTURE"))
+		{
+			StringTokenizer token = new StringTokenizer(command, " ");
+			
+			return Capture(Integer.parseInt(token.nextToken()));
+		}
+		
+		return null;
 	}
 	
 	private String issueCommand(comType type)

@@ -30,4 +30,10 @@ public class ServiceTask<V> extends Service<V> {
 	{
 		reset();
 	}
+	
+	@Override
+	protected void cancelled()
+	{
+		reset();
+	}
 }

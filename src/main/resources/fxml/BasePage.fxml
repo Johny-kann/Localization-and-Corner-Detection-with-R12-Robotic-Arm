@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.web.*?>
 <?import javafx.scene.control.*?>
@@ -37,8 +38,6 @@
                <children>
                   <WebView fx:id="browser" prefHeight="205.0" prefWidth="240.0" GridPane.columnIndex="3" GridPane.rowSpan="2" />
                   <Button fx:id="input" mnemonicParsing="false" text="Button" GridPane.columnIndex="2" />
-                  <Button fx:id="input2" mnemonicParsing="false" text="Button" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                  <Label fx:id="alertLabel" text="Label" />
                   <ComboBox fx:id="personSelect" editable="true" prefWidth="150.0" promptText="select" GridPane.columnIndex="1" />
                   <GridPane GridPane.columnIndex="3" GridPane.rowIndex="3" GridPane.rowSpan="3">
                     <columnConstraints>
@@ -52,7 +51,7 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <ImageView fx:id="cameraPort" fitHeight="150.0" fitWidth="306.0" pickOnBounds="true" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="SOMETIMES" />
+                        <ImageView fx:id="cameraPort" fitHeight="168.0" fitWidth="340.0" pickOnBounds="true" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="SOMETIMES" />
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <children>
                               <Button fx:id="prevImage" mnemonicParsing="false" text="&lt;&lt;" />
@@ -70,21 +69,40 @@
                         </HBox>
                      </children>
                   </GridPane>
-                  <FlowPane hgap="10.0" prefHeight="25.0" prefWidth="140.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="6">
+                  <VBox GridPane.columnSpan="2147483647" GridPane.rowIndex="6">
                      <children>
-                        <Label text="current" />
-                        <Label text="hand" />
-                        <Label fx:id="labHandMov" text="value" />
-                        <Label text="wrist" />
-                        <Label fx:id="labWristMov" text="value" />
-                        <Label text="posX" />
-                        <Label fx:id="labXMov" text="xvalue" />
-                        <Label text="posy" />
-                        <Label fx:id="labYMov" text="yvalue" />
-                        <Label text="posz" />
-                        <Label fx:id="labZMov" text="zvalue" />
+                        <FlowPane hgap="10.0" prefHeight="25.0" prefWidth="140.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="6">
+                           <children>
+                              <Label text="current_MoveTo" />
+                              <Label text="hand" />
+                              <Label fx:id="labHandMov" text="value" />
+                              <Label text="wrist" />
+                              <Label fx:id="labWristMov" text="value" />
+                              <Label text="posX" />
+                              <Label fx:id="labXMov" text="xvalue" />
+                              <Label text="posy" />
+                              <Label fx:id="labYMov" text="yvalue" />
+                              <Label text="posz" />
+                              <Label fx:id="labZMov" text="zvalue" />
+                           </children>
+                        </FlowPane>
+                        <FlowPane hgap="10.0" prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <Label text="Current_Ajma" />
+                              <Label text="Hand" />
+                              <Label fx:id="ajmaHand" text="value" />
+                              <Label text="wrist" />
+                              <Label fx:id="ajmaWrist" text="value" />
+                              <Label text="elbow" />
+                              <Label fx:id="ajmaElbow" text="value" />
+                              <Label text="shouler" />
+                              <Label fx:id="ajmaShoulder" text="value" />
+                              <Label text="waist" />
+                              <Label fx:id="ajmaWaist" text="value" />
+                           </children>
+                        </FlowPane>
                      </children>
-                  </FlowPane>
+                  </VBox>
                   <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnSpan="3" GridPane.rowIndex="3" GridPane.rowSpan="3">
                      <children>
                         <fx:include source="CommandGivers.fxml" />
@@ -97,6 +115,50 @@
                         <Button fx:id="output" mnemonicParsing="false" text="Output" />
                      </children>
                   </HBox>
+                  <GridPane GridPane.columnSpan="3" GridPane.rowIndex="1">
+                    <columnConstraints>
+                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="148.0" minWidth="10.0" prefWidth="91.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="250.0" minWidth="10.0" prefWidth="216.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="53.0" minHeight="10.0" prefHeight="43.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="24.0" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="24.0" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Button fx:id="input2" mnemonicParsing="false" text="Cancel Service" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label fx:id="alertLabel" text="Label" GridPane.columnIndex="1" />
+                        <TextField fx:id="moveToField" editable="false" promptText="MOVETO" text="MOVETO" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <font>
+                              <Font size="9.0" />
+                           </font>
+                        </TextField>
+                        <TextField fx:id="ajmaField" editable="false" promptText="AJMA" text="AJMA" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                           <font>
+                              <Font size="9.0" />
+                           </font>
+                        </TextField>
+                        <Label text="Last Command" GridPane.rowIndex="2" GridPane.rowSpan="3" />
+                        <Label text="Service" GridPane.rowIndex="1" />
+                        <Label text="Status" />
+                        <Label fx:id="last_command" text="Last_Command" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                           <font>
+                              <Font size="10.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </GridPane>
+                  <Button fx:id="issue_But" mnemonicParsing="false" prefHeight="27.0" prefWidth="303.0" text="Issue" GridPane.columnSpan="3" GridPane.rowIndex="2">
+                     <graphic>
+                        <TextField fx:id="issue_command" prefHeight="17.0" prefWidth="191.0" promptText="issue_command">
+                           <font>
+                              <Font size="9.0" />
+                           </font>
+                        </TextField>
+                     </graphic>
+                  </Button>
                </children>
             </GridPane>
             <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="1">

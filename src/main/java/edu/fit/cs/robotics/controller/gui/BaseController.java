@@ -10,6 +10,7 @@ import java.util.concurrent.ExecutorService;
 
 import javax.annotation.processing.ProcessingEnvironment;
 
+import edu.fit.cs.robotics.BO.ContentAnalyser;
 import edu.fit.cs.robotics.BO.RobotLogics;
 import edu.fit.cs.robotics.constants.Constants;
 import edu.fit.cs.robotics.controller.RoboticsOperator;
@@ -115,6 +116,13 @@ public class BaseController {
 	 @FXML
 	    private Button nextImage;
 	 
+	 @FXML
+	    private TextField moveToField;
+
+	 @FXML
+	    private TextField ajmaField;
+
+	 
 	 
 	 private int webView = 0;
 	 
@@ -123,6 +131,31 @@ public class BaseController {
 	 private int countt = 0;
 	 
 	 private int Total_images = 0;
+	 
+	 @FXML
+	    private Label ajmaWrist;
+	 
+	 @FXML
+	    private Label ajmaHand;
+	 
+	 @FXML
+	    private Label ajmaElbow;
+	 
+	 @FXML
+	    private Label ajmaShoulder;
+	 
+	 @FXML
+	    private Label ajmaWaist;
+	 
+	 @FXML 
+	 private Label last_command;
+	 
+	  @FXML
+	  private TextField issue_command;
+	  
+	  @FXML
+	  private Button issue_But;
+	 
 	
 	@FXML
     void initialize() {
@@ -205,9 +238,31 @@ public class BaseController {
 	//	imageCount.textProperty().bind(count.asString());
 		cameraBut.setText("Capture "+Total_images);
 	}
+
 	
 	void initActions()
 	{
+		
+		issue_But.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				
+				service.setMytask(new Task<String>() {
+					@Override
+					protected String call() throws Exception {
+			
+						String url = robotController.getArm().issueCommand(issue_command.getText());
+						return url;
+					
+				
+			}
+		});
+				
+				service.start();
+			}
+		});
+		
 		
 		saveImages.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -389,7 +444,8 @@ public class BaseController {
 			
 			@Override
 			public void handle(ActionEvent event) {
-				System.out.println(service.getValue());
+			//	System.out.println(service.getValue());
+				service.cancel();
 								
 			}	// TODO Auto-generated method stub
 			
@@ -401,9 +457,14 @@ public class BaseController {
 	
 	void disBrows(String content)
 	{
-	//	if(content.contains("CAPTURE DONE")||content.contains("Cannot reach out"))
+	
+		ContentAnalyser analyse = new ContentAnalyser();
+		
 		if(robotController.getArm().last_issued_command_success)
-			alertLabel.setText("Moved");
+		{	alertLabel.setText("Moved");
+			moveToField.setText(analyse.getEquivalentMoveTo(content).getString());
+			ajmaField.setText(analyse.getEquivalentAJMA(content).getString());
+		}
 		else
 			alertLabel.setText("Captured");
 		
@@ -425,7 +486,17 @@ public class BaseController {
 		labXMov.setText(robotController.getArm().current_MoveTo.posX+"");
 		labYMov.setText(robotController.getArm().current_MoveTo.posY+"");
 		labZMov.setText(robotController.getArm().current_MoveTo.posZ+"");
+		
+		ajmaHand.setText(robotController.getArm().current_AJMA.handAngle+"");
+		ajmaWrist.setText(robotController.getArm().current_AJMA.wristAngle+"");
+		ajmaElbow.setText(robotController.getArm().current_AJMA.elbowAngle+"");
+		ajmaShoulder.setText(robotController.getArm().current_AJMA.shoulderAngle+"");
+		ajmaWaist.setText(robotController.getArm().current_AJMA.waistAngle+"");
+		
+		last_command.setText(robotController.getArm().last_command);
 	}
 	
 	
 }
+		
+	

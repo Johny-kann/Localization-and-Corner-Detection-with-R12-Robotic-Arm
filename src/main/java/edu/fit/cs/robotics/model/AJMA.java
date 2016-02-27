@@ -19,4 +19,10 @@ public class AJMA {
 		this.waistAngle = waistAngle;
 		
 	}
+	
+	public String getString()
+	{
+		return handAngle+" "+wristAngle+" "+elbowAngle+" "+shoulderAngle+" "+waistAngle+" AJMA";
+		
+	}
 }

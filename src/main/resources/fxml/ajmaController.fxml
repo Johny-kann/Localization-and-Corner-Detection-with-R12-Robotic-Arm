@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
@@ -28,12 +29,18 @@
             <Button fx:id="elb_up" mnemonicParsing="false" text="Elb Up" GridPane.columnIndex="1" />
             <Button fx:id="twist" contentDisplay="RIGHT" mnemonicParsing="false" prefHeight="25.0" prefWidth="120.0" text="Twist">
                <graphic>
-                  <TextField fx:id="twist_text" alignment="BOTTOM_LEFT" prefHeight="25.0" prefWidth="47.0" />
+                  <TextField fx:id="twist_text" alignment="BOTTOM_LEFT" prefWidth="47.0">
+                     <font>
+                        <Font size="9.0" />
+                     </font></TextField>
                </graphic>
             </Button>
             <Button fx:id="wrist" contentDisplay="RIGHT" mnemonicParsing="false" prefHeight="25.0" prefWidth="120.0" text="Wrist" GridPane.columnIndex="3">
                <graphic>
-                  <TextField fx:id="wrist_field" alignment="BOTTOM_LEFT" prefHeight="25.0" prefWidth="47.0" />
+                  <TextField fx:id="wrist_field" alignment="BOTTOM_LEFT" prefWidth="47.0">
+                     <font>
+                        <Font size="9.0" />
+                     </font></TextField>
                </graphic>
             </Button>
             <TextField fx:id="step" text="step" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />

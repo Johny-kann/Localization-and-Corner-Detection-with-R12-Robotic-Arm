@@ -75,6 +75,12 @@ public class ContentAnalyser {
 		
 	}
 	
+	public AJMA getEquivalentAJMA(String content)
+	{
+		return getAJMAFromJMA(
+		getEquivalentJMA(content));
+	}
+	
 	public AJMA getAJMAFromJMA(JMA jma)
 	{
 		AJMA temp = new AJMA();
