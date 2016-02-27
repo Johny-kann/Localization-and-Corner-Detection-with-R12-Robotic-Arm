@@ -180,9 +180,11 @@ public class BaseController {
 			@Override
 			public void handle(WorkerStateEvent event) {
 				// TODO Auto-generated method stub
+				Navigator.imageControl.addImages(serviceImage.getValue());
+				
 				serviceImage.reset();
 				
-				Navigator.imageControl.addImages(serviceImage.getValue());
+				
 				
 			}
 		});
@@ -263,12 +265,21 @@ public class BaseController {
 			public void handle(ActionEvent event) {
 				// TODO Auto-generated method stub
 				count.add(-1);
-				countt--;
 				
 				
-				cameraPort.setImage(robotController.getArm().getImageAt(countt));
+				try
+				{
+					countt--;
+				cameraPort.setImage(Navigator.imageControl.getImageAt(countt));;
+				
 
 				imageCount.setText(countt+"");
+				}catch(Exception e)
+				{
+					countt++;
+					e.printStackTrace();
+				}
+				
 				
 			}
 		});
@@ -280,14 +291,21 @@ public class BaseController {
 				// TODO Auto-generated method stub
 				count.add(1);
 				
-				countt++;
+				try
+				{
+					countt++;
 				
+				cameraPort.setImage(Navigator.imageControl.getImageAt(countt));
+			
 				
-				
-				cameraPort.setImage(robotController.getArm().getImageAt(countt));
-				
-	//			imageCount.setText(count.asString().get());
+	
 				imageCount.setText(countt+"");
+				}catch(Exception e)
+				{
+					countt--;
+					e.printStackTrace();
+					
+				}
 			}
 		});
 		
@@ -302,6 +320,10 @@ public class BaseController {
 				Total_images++;
 				cameraBut.setText("Capture "+Total_images);
 				
+				serviceImage.setUrl(Constants.LAST_IMAGE_URL);;
+				
+				serviceImage.start();
+				
 			}
 		});
 		
@@ -311,12 +333,31 @@ public class BaseController {
 			public void handle(ActionEvent event) {
 				
 				robotController.getArm().Capture(Total_images);
+				
 				cameraPort.setImage(robotController.getArm().getLastImage());
 				Total_images++;
 				cameraBut.setText("Capture "+Total_images);
 				
+				serviceImage.setUrl(Constants.LAST_IMAGE_URL);;
+				
+				serviceImage.start();
+				
 			}
 		});
+		
+		lastCapture.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				
+				cameraPort.setImage(robotController.getArm().getLastImage());
+	//			serviceImage.setUrl(Constants.LAST_IMAGE_URL);;
+				
+	//			serviceImage.start();
+				
+			}
+		});
+
 		
 		personSelect.valueProperty().addListener(new ChangeListener<String>() {
             @Override 

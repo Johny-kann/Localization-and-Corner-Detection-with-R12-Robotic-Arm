@@ -154,5 +154,9 @@ public class ImageShowerController {
 		
 	}
 	
+	public Image getImageAt(int num)
+	{
+		return imageList.getItems().get(num).getImage(); 
+	}
 
 }
