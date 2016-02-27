@@ -5,6 +5,8 @@ import javafx.geometry.Point3D;
 
 public class Constants {
 	
+	public static double IMAGE_VIEW_WIDTH = 150.0;
+	
 	public static String BASE_URL = "http://debatedecide.fit.edu/";
 	
 	public static String IMAGE_URL = BASE_URL+"robot/";

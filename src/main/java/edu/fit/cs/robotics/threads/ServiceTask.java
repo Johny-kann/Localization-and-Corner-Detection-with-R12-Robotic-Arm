@@ -21,7 +21,7 @@ public class ServiceTask<V> extends Service<V> {
 	
 	@Override
 	protected void succeeded() {
-		System.out.println("Rest");
+	//	System.out.println("Rest");
 	    reset();
 	}
 	

@@ -9,5 +9,7 @@ public class FXMLConstants {
 	public static String AJMA_FXML = "/fxml/ajmaController.fxml";
 	
 	public static String MOVETO_FXML = "/fxml/moveToController.fxml";
+	
+	public static String IMAGE_FXML = "/fxml/ImageViewer.fxml";
 
 }

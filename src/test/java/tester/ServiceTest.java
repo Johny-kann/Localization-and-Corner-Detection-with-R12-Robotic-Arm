@@ -21,7 +21,7 @@ public class ServiceTest {
 		
 		RoboticsOperator operator = new RoboticsOperator();
 		
-		operator.printPhotos("Camera", 44);
+		operator.printPhotos("Camera", 100);
 		
 	}
 	

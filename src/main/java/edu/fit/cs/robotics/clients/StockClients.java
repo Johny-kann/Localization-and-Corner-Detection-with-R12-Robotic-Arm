@@ -38,20 +38,8 @@ public class StockClients {
 	
 	public Image getImage(String ImageUrl)
 	{
-		Image image = null;// = restTemplate.getForObject(UrlConstants.IMAGE_URL, Image.class);
-				
-		resource = appContext.getResource(ImageUrl
-				//"http://debatedecide.fit.edu/robot/last.bmp"
-				);
-		    	
-		    try{
-		     	  InputStream is = resource.getInputStream();
-		     	  image = new Image(is);
-	
-		    }catch(IOException e){
-		    		e.printStackTrace();
-		    }
-		
+		Image image = new Image(ImageUrl);
+					
 		return image;
 	}
 	

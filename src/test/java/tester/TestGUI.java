@@ -2,12 +2,19 @@ package tester;
 
 import java.net.URL;
 
+import edu.fit.cs.robotics.BO.RobotLogics;
 import edu.fit.cs.robotics.constants.FXMLConstants;
 import edu.fit.cs.robotics.controller.gui.BaseController;
+import edu.fit.cs.robotics.controller.gui.ImageShowerController;
+import edu.fit.cs.robotics.controller.gui.Navigator;
+import edu.fit.cs.robotics.threads.ImageService;
 import javafx.application.Application;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -22,7 +29,7 @@ public class TestGUI extends Application {
 			
 			loader.setBuilderFactory(new JavaFXBuilderFactory());
 			
-			URL location = getClass().getResource(FXMLConstants.COMMAND_GIVER_FXML);
+			URL location = getClass().getResource(FXMLConstants.IMAGE_FXML);
 		
 			FXMLLoader fxmlLoader = new FXMLLoader();
 			
@@ -32,7 +39,7 @@ public class TestGUI extends Application {
 			
 			StackPane root2 =  fxmlLoader.load(location.openStream());
 	
-		//	BaseController test = fxmlLoader.getController();
+			ImageShowerController test = fxmlLoader.getController();
 			
 			
 		
@@ -40,18 +47,36 @@ public class TestGUI extends Application {
 		
 			primaryStage.setTitle("Johny's Wrapper");
 
-//			primaryStage.setFullScreen(true);
-		
-			
-//		primaryStage.setFullScreenExitKeyCombination(new KeyCodeCombination(KeyCode.ENTER, KeyCombination.ALT_DOWN)
-//			);
-		
-		
 			primaryStage.setScene(scene);
 			
 			primaryStage.show();
 			
+	/*		ImageService serviceImage = new ImageService();
 			
+			serviceImage.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+
+				@Override
+				public void handle(WorkerStateEvent event) {
+					// TODO Auto-generated method stub
+					System.out.println("Succeded");
+					serviceImage.reset();
+					
+					Navigator.imageControl.addImages(serviceImage.getValue());
+					
+				}
+			});
+			
+			
+			serviceImage.setUrl("http://debatedecide.fit.edu/robot/4.bmp");
+			
+			serviceImage.start();
+			
+		*/	
+			
+	/*		test.addImages(RobotLogics.readImageFromFile("Images/Camera1.png"));
+			test.addImages(RobotLogics.readImageFromFile("Images/Camera2.png"));
+			test.addImages(RobotLogics.readImageFromFile("Images/Camera3.png"));
+		*/	
 			
 		} catch(Exception e) {
 			e.printStackTrace();

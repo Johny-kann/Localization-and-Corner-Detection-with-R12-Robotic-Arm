@@ -13,6 +13,7 @@ import javax.annotation.processing.ProcessingEnvironment;
 import edu.fit.cs.robotics.BO.RobotLogics;
 import edu.fit.cs.robotics.constants.Constants;
 import edu.fit.cs.robotics.controller.RoboticsOperator;
+import edu.fit.cs.robotics.threads.ImageService;
 import edu.fit.cs.robotics.threads.MyService;
 import edu.fit.cs.robotics.threads.ServiceHTTP;
 import edu.fit.cs.robotics.threads.ServiceTask;
@@ -106,6 +107,8 @@ public class BaseController {
 	 
 	 ServiceTask<String> service;
 	 
+	 ImageService serviceImage;
+	 
 	 @FXML
 	    private Button prevImage;
 
@@ -166,6 +169,20 @@ public class BaseController {
 			public void handle(WorkerStateEvent event) {
 			
 				disBrows(service.getValue());
+				
+			}
+		});
+		
+		serviceImage = new ImageService();
+		
+		serviceImage.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+
+			@Override
+			public void handle(WorkerStateEvent event) {
+				// TODO Auto-generated method stub
+				serviceImage.reset();
+				
+				Navigator.imageControl.addImages(serviceImage.getValue());
 				
 			}
 		});
@@ -265,6 +282,8 @@ public class BaseController {
 				
 				countt++;
 				
+				
+				
 				cameraPort.setImage(robotController.getArm().getImageAt(countt));
 				
 	//			imageCount.setText(count.asString().get());
@@ -272,6 +291,19 @@ public class BaseController {
 			}
 		});
 		
+		
+		cameraBut.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				
+				robotController.getArm().Capture(Total_images);
+				
+				Total_images++;
+				cameraBut.setText("Capture "+Total_images);
+				
+			}
+		});
 		
 		captureButton.setOnAction(new EventHandler<ActionEvent>() {
 

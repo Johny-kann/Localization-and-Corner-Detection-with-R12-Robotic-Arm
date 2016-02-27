@@ -17,6 +17,8 @@ public class Navigator {
 	
 	public static AJmaController jmaControl;
 	
+	public static ImageShowerController imageControl;
+	
 	public static void LoadNode(ObservableList<Node> node,String fxml)
 	{
 		

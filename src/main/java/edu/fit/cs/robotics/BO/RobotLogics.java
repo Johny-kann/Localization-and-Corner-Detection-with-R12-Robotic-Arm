@@ -1,15 +1,19 @@
 package edu.fit.cs.robotics.BO;
 
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Point3D;
 import javafx.scene.image.Image;
 
 import javax.imageio.ImageIO;
-
 
 
 import edu.fit.cs.robotics.constants.Constants;
@@ -24,7 +28,19 @@ import edu.fit.cs.robotics.constants.Constants;
 public class RobotLogics {
 	
 	
-	
+	public static Image readImageFromFile(String fileLoc)
+	{
+		
+		InputStream is = null;
+		try {
+			is = new FileInputStream(fileLoc);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Image image = new Image(is);
+		return image;
+	}
 	
 	public static boolean writeImagePng(String fileLoc,Image image)
 	{
