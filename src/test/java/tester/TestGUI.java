@@ -38,6 +38,7 @@ public class TestGUI extends Application {
 			view.setFitHeight(600);
 			view.setPreserveRatio(true);
 			
+		//	Imgcodecs.
 	
 			root2.getChildren().setAll(view);
 			
