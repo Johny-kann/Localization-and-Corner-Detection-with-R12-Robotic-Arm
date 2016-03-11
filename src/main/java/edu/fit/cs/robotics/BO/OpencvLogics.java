@@ -3,6 +3,10 @@ package edu.fit.cs.robotics.BO;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
@@ -16,6 +20,7 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.imgproc.Moments;
 
+import edu.fit.cs.robotics.model.images.Sectors;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 
@@ -63,7 +68,20 @@ public class OpencvLogics {
     }
 	
 	public static Mat bufferedImageToMat(BufferedImage bi) {
-        Mat mat = new Mat(bi.getHeight(), bi.getWidth(), CvType.CV_8UC3);
+    
+		Mat mat = new Mat(bi.getHeight(), bi.getWidth(), CvType.CV_8UC3);
+   
+    /*    ByteArrayOutputStream s = new ByteArrayOutputStream();
+		try {
+			ImageIO.write(bi, "png", s);
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}
+		byte[] data  = s.toByteArray();
+      */  
+        
+        
         byte[] data = ((DataBufferByte) bi.getRaster().getDataBuffer()).getData();
         mat.put(0, 0, data);
         return mat;
@@ -93,6 +111,27 @@ public class OpencvLogics {
 		centroid.y =  (mom01 / area);
 
 		return area;
+	}
+	
+	
+	public static void findMaxRegion(Sectors sector)
+	{
+		if(sector.centroid.x > 640/2 && sector.centroid.y > 480/2)
+		{
+			sector.region = Sectors.Region.quad_4;
+			
+		} else if( !(sector.centroid.x > 640/2) && sector.centroid.y > 480/2)
+		{
+			sector.region = Sectors.Region.quad_3;
+		}
+		else if(sector.centroid.x > 640/2 && !(sector.centroid.y > 480/2))
+		{
+			sector.region = Sectors.Region.quad_1;
+		}
+		else
+		{
+			sector.region = Sectors.Region.quad_2;
+		}
 	}
 	
 }

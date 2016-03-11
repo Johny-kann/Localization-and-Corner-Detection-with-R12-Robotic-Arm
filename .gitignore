@@ -1,6 +1,5 @@
 /build/
 .settings/
-.project
 .sringBeans
 bin/
 target/

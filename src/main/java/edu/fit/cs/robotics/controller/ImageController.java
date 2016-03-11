@@ -56,8 +56,9 @@ public class ImageController {
 	
 	public void ScanSector(Sectors sector,String name)
 	{
-		Image img = RobotLogics.readImageFromFile(name);
-		Mat mat = null;
+//		Image img = RobotLogics.readImageFromFile(name);
+		
+		Mat mat = null;//OpencvLogics.imageToMat(img);
 		try {
 			mat = OpencvLogics.bufferedImageToMat(ImageIO.read(new File(name)));
 		} catch (IOException e) {
@@ -89,9 +90,9 @@ public class ImageController {
 		
 	}
 	
-	public void ScanSectors()
+	public Sectors ScanSectors()
 	{
-		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+		
 		
 		String base = "Images/Sectors";
 		
@@ -100,7 +101,8 @@ public class ImageController {
 		
 		for(int i=0;i<sectors.length;i++)
 		{
-			ScanSector(sectors[i], base+i+".png");
+	//		System.out.println(i);
+			ScanSector(sectors[i], base+(i)+".png");
 			
 			if(sectors[i].area > max)
 			{
@@ -115,17 +117,22 @@ public class ImageController {
 			
 		}
 		
-		System.out.println("Max area "+max+" "+sectors[c].name);
+		OpencvLogics.findMaxRegion(sectors[c]);
+	
+		return sectors[c];
 	}
 	
 	public static void main(String[] args) {
 		
+		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+		
 		ImageController control = new ImageController();
 		control.initSectors(control.sectors);
 		
-		control.ScanSectors();
+		Sectors maxSector = control.ScanSectors();
 		
-
+		System.out.println(maxSector.region);
+		
 	}
 
 }

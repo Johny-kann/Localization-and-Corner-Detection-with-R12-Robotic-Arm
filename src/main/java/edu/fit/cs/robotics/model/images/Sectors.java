@@ -15,4 +15,8 @@ public class Sectors {
 	
 	public String command;
 	
+	public Region region;
+	
+public enum Region {quad_1,quad_2,quad_3,quad_4};
+	
 }
