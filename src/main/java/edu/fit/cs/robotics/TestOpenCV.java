@@ -24,7 +24,7 @@ public class TestOpenCV {
 	 */
 	public static void main(String[] args) {
 		
-		nu.pattern.OpenCV.loadShared();
+	//	nu.pattern.OpenCV.loadShared();
 //		System.loadLibrary(org.opencv.core.Core.NATIVE_LIBRARY_NAME);
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		Mat mat = Mat.eye(3, 3, CvType.CV_8UC1);

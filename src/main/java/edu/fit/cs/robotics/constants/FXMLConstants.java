@@ -11,5 +11,8 @@ public class FXMLConstants {
 	public static String MOVETO_FXML = "/fxml/moveToController.fxml";
 	
 	public static String IMAGE_FXML = "/fxml/ImageViewer.fxml";
-
+	
+	public static String OPENCV_FXML = "/fxml/OpenCVFxml.fxml";
+	
+	
 }

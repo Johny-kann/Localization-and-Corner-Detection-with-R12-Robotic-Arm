@@ -13,7 +13,7 @@ import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
 import org.opencv.core.Range;
-import org.opencv.highgui.Highgui;
+import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 import javafx.scene.image.Image;
@@ -21,12 +21,6 @@ import javafx.scene.image.Image;
 public class OpencvTest {
 
 	
-	public Image imageFX(Mat mat)
-	{
-		MatOfByte byteMat = new MatOfByte();
-		Highgui.imencode(".bmp", mat, byteMat);
-		return new Image(new ByteArrayInputStream(byteMat.toArray()));
-	}
 	
 	public static void main1(String argv[])
 	{
@@ -41,12 +35,13 @@ public class OpencvTest {
 	
 	public static void main(String argv[])
 	{
-		nu.pattern.OpenCV.loadShared();
+		
+		
 			System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 			Mat mat = Mat.eye(3, 3, CvType.CV_8UC1);
 			System.out.println("mat = "+mat.dump());
 			
-			Mat m = Highgui.imread("Images/Camera1.png");
+			Mat m = Imgcodecs.imread("Images/Camera1.png");
 			int type = BufferedImage.TYPE_BYTE_GRAY;
 			if ( m.channels() > 1 ) {
 			    Mat m2 = new Mat();
