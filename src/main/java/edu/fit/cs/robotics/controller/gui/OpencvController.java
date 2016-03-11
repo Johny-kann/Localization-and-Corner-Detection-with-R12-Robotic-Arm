@@ -88,13 +88,15 @@ public class OpencvController {
     void initialize()
     {
     	initChangeListeners();
+    	
     	loadImage();
     }
     
     
     private Mat cameraFeed;
+    private final Mat temp = new Mat(new Size(640, 480), 8, new Scalar(3,0,0,0)) ;
     private final Mat hsv = new Mat(new Size(640, 480), 8, new Scalar(3,0,0,0)) ;
-    private final Mat threshold = new Mat(new Size(640, 480), 8, new Scalar(1,0,0,0)); 
+    private final Mat threshold = new Mat(new Size(640, 480), 8, new Scalar(3,0,0,0)); 
     
     private int count = 0;
     
@@ -116,6 +118,8 @@ public class OpencvController {
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 				processImage();
 				paintNormal(resultView, threshold);
+				paintNormal(normalView, temp);
+				paintNormal(hsvView, hsv);
 								
 			}
 		};
@@ -154,23 +158,19 @@ public class OpencvController {
     
     private void loadImage() {
      
-    	cameraFeed = Imgcodecs.imread("Images/Sectors"+count+".png");
+    	cameraFeed = Imgcodecs.imread("Images/Camera"+count+".png");
          
 		Imgproc.cvtColor(cameraFeed, hsv, Imgproc.COLOR_BGR2HSV);
 //    	cameraFeed.copyTo(hsv);
-		Core.inRange(hsv, new Scalar(hminSlider.getValue(), sminslider.getValue(), vMinSlider.getValue(), 0), new Scalar(hmaxSlider.getValue(), smaxslider.getValue(), vmaxSlider.getValue(), 0), threshold);
+//		Core.inRange(hsv, new Scalar(hminSlider.getValue(), sminslider.getValue(), vMinSlider.getValue(), 0), new Scalar(hmaxSlider.getValue(), smaxslider.getValue(), vmaxSlider.getValue(), 0), threshold);
 
 		processImage();
 		
-		paintNormal(normalView, cameraFeed);;
+		paintNormal(normalView, temp);;
 		
 		paintNormal(hsvView, hsv);
 		
-		
-		
 		paintNormal(resultView,threshold );
-		
-
 		
 		
     }
@@ -179,24 +179,26 @@ public class OpencvController {
     {
     	
     	Core.inRange(hsv, new Scalar(hminSlider.getValue(), sminslider.getValue(), vMinSlider.getValue(), 0), new Scalar(hmaxSlider.getValue(), smaxslider.getValue(), vmaxSlider.getValue(), 0), threshold);
-    	
-    	
+     	
+    	cameraFeed.copyTo(temp);
+        	
     	int posX = 0;
 		int posY = 0;
+  	
+		Point temppt = new Point();
+		
+    	double area = OpencvLogics.findCentroid(threshold,temppt);
+		posX = (int) (temppt.x);
+		posY = (int) (temppt.y);
 
-    	Moments moments = Imgproc.moments(threshold, true);
-		double mom10 = moments.m10;
-		double mom01 = moments.m01;
-		double area = moments.m00;
-		posX = (int) (mom10 / area);
-		posY = (int) (mom01 / area);
-		// only if its a valid position
-          
+		System.out.println(area);
+		
 		if (posX > 0 && posY > 0) {
-		    Imgproc.line(cameraFeed, new Point(posX - 5, posY), new Point(posX + 5, posY),
-		            new Scalar(hminSlider.getValue(), sminslider.getValue(), vMinSlider.getValue(), 0), 2, 8, 0);
-		    Imgproc.line(cameraFeed, new Point(posX, posY - 5), new Point(posX, posY + 5),
-		            new Scalar(hmaxSlider.getValue(), smaxslider.getValue(), vmaxSlider.getValue(), 0), 2, 8, 0);
+		    Imgproc.line(temp, new Point(posX - 5, posY), new Point(posX + 5, posY),
+		            new Scalar(0, 0 , 255, 0), 2, 8, 0);
+		    Imgproc.line(temp, new Point(posX, posY - 5), new Point(posX, posY + 5),
+		            new Scalar(255,0 ,0 , 0), 2, 8, 0);
+		    MyFilledCircle(temp, new Point(posX, posY));
 		}
 		
 	//	paintNormal(resultView,threshold );
@@ -207,5 +209,13 @@ public class OpencvController {
     	view.setImage(OpencvLogics.mat2Image(cameraFeed)); 
     }
     
+    void MyFilledCircle( Mat img, Point center )
+    {
+
+    Imgproc.circle(img, center, 10, new Scalar(0,0,255),2);
+     
+    }
+
+
  
 }

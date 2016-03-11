@@ -1,39 +1,16 @@
 package tester;
 
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.net.URL;
-
-import javax.imageio.ImageIO;
-
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
-import org.opencv.core.MatOfByte;
-import org.opencv.highgui.Highgui;
+import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
-import org.springframework.web.filter.HiddenHttpMethodFilter;
 
-import edu.fit.cs.robotics.BO.RobotLogics;
-import edu.fit.cs.robotics.constants.FXMLConstants;
-import edu.fit.cs.robotics.controller.gui.BaseController;
-import edu.fit.cs.robotics.controller.gui.ImageShowerController;
-import edu.fit.cs.robotics.controller.gui.Navigator;
-import edu.fit.cs.robotics.threads.ImageService;
 import javafx.application.Application;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import opencv.OpencvTest;
 
 public class TestGUI extends Application {
 
@@ -82,7 +59,7 @@ public class TestGUI extends Application {
 		
 			
 			
-			Mat m = Highgui.imread("Images/Noon_AJMA2.png",Highgui.CV_LOAD_IMAGE_COLOR);
+			Mat m = Imgcodecs.imread("Images/Noon_AJMA2.png",Imgcodecs.CV_LOAD_IMAGE_COLOR);
 	//		System.out.println(m.channels());
 			
 /*			MatOfByte byteMat = new MatOfByte();
@@ -120,9 +97,9 @@ public class TestGUI extends Application {
 			*/
 			
 			
-			view.setImage(new OpencvTest().imageFX(k)
+	/*		view.setImage(new OpencvTest().imageFX(k)
 					);
-			
+		*/	
 			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -131,7 +108,7 @@ public class TestGUI extends Application {
 
 	public static void main(String[] args) {
 		
-		nu.pattern.OpenCV.loadShared();
+	//	nu.pattern.OpenCV.loadShared();
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 	
 		launch(args);
