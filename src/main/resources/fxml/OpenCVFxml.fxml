@@ -6,8 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.StackPane?>
 
-
-<StackPane prefHeight="571.0" prefWidth="765.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="edu.fit.cs.robotics.controller.gui.OpencvController">
+<StackPane prefHeight="571.0" prefWidth="765.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.fit.cs.robotics.controller.gui.OpencvController">
    <children>
       <GridPane>
         <columnConstraints>
@@ -25,10 +24,10 @@
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
                <children>
                   <Slider fx:id="hmaxSlider" layoutX="73.0" layoutY="47.0" max="360.0" prefHeight="16.0" prefWidth="236.0" showTickLabels="true" showTickMarks="true" value="172.0" />
-                  <Slider fx:id="smaxslider" layoutX="74.0" layoutY="135.0" max="255.0" prefHeight="16.0" prefWidth="236.0" showTickLabels="true" showTickMarks="true" value="200.0" />
+                  <Slider fx:id="smaxslider" layoutX="74.0" layoutY="135.0" max="255.0" prefHeight="16.0" prefWidth="236.0" showTickLabels="true" showTickMarks="true" value="233.0" />
                   <Slider fx:id="vmaxSlider" layoutX="72.0" layoutY="205.0" max="255.0" prefHeight="16.0" prefWidth="236.0" showTickLabels="true" showTickMarks="true" value="233.0" />
                   <Slider fx:id="hminSlider" layoutX="73.0" layoutY="85.0" max="360.0" prefHeight="16.0" prefWidth="236.0" showTickLabels="true" showTickMarks="true" value="78.0" />
-                  <Slider fx:id="sminslider" layoutX="73.0" layoutY="168.0" max="255.0" prefHeight="16.0" prefWidth="236.0" showTickLabels="true" showTickMarks="true" value="118.0" />
+                  <Slider fx:id="sminslider" layoutX="73.0" layoutY="168.0" max="255.0" prefHeight="16.0" prefWidth="236.0" showTickLabels="true" showTickMarks="true" value="151.0" />
                   <Slider fx:id="vMinSlider" layoutX="72.0" layoutY="243.0" max="255.0" prefHeight="16.0" prefWidth="236.0" showTickLabels="true" showTickMarks="true" value="64.0" />
                   <Label fx:id="hminLabel" layoutX="313.0" layoutY="76.0" text="Label" />
                   <Label fx:id="hMaxLabel" layoutX="315.0" layoutY="39.0" text="Label" />

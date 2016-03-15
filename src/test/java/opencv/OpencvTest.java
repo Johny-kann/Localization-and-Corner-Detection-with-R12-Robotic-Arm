@@ -74,7 +74,7 @@ public class OpencvTest {
 	
 	public static void main1(String argv[])
 	{
-		
+	//	Imgproc.find
 		
 			System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 			Mat mat = Mat.eye(3, 3, CvType.CV_8UC1);

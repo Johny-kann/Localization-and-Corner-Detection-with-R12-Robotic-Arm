@@ -1,7 +1,10 @@
 package edu.fit.cs.robotics.controller.gui;
 
+import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -11,6 +14,7 @@ import javax.swing.JPanel;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
@@ -161,6 +165,8 @@ public class OpencvController {
     	cameraFeed = Imgcodecs.imread("Images/Sectors"+count+".png");
          
 		Imgproc.cvtColor(cameraFeed, hsv, Imgproc.COLOR_BGR2HSV);
+//		Imgproc.blur(hsv, hsv, new Size(20.0, 20.0));
+		Imgproc.blur(hsv, hsv, new Size(10.0, 10.0));
 //    	cameraFeed.copyTo(hsv);
 //		Core.inRange(hsv, new Scalar(hminSlider.getValue(), sminslider.getValue(), vMinSlider.getValue(), 0), new Scalar(hmaxSlider.getValue(), smaxslider.getValue(), vmaxSlider.getValue(), 0), threshold);
 
@@ -191,6 +197,18 @@ public class OpencvController {
 		posX = (int) (temppt.x);
 		posY = (int) (temppt.y);
 
+		List<MatOfPoint> contour = new ArrayList<MatOfPoint>();
+		
+		Mat hierarchy = new Mat();
+		
+		
+//		Imgproc.findContours(threshold, contour, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
+//		Imgproc.drawContours(temp, contour,-1, new Scalar(0,255,0));
+		
+		
+		temp.copyTo(hierarchy);
+		
+		
 		System.out.println(area);
 		
 		if (posX > 0 && posY > 0) {

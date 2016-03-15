@@ -17,6 +17,14 @@ public class Sectors {
 	
 	public Region region;
 	
+	public String quad1_command;
+	
+	public String quad2_command;
+	
+	public String quad3_command;
+	
+	public String quad4_command;
+	
 public enum Region {quad_1,quad_2,quad_3,quad_4};
 	
 }
