@@ -17,7 +17,7 @@ static int count = 0;
 	}	
 	
 		
-	public void getCamera()
+	public void getCamera(int count)
 	{
 		robot.Capture(count);
 		

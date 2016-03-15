@@ -18,6 +18,8 @@ public class Constants {
 	public static String JEFFER_PASS = "MJJkyhcl2l2h2fy2";
 	
 	public static String MURALI_PASS = "MuraliShrikant173";
+	
+	public static String SRI_PASS = "tyfctfgjhjgRR";
 			
 	
 	public static String PASSWORD = JOHNY_PASS;

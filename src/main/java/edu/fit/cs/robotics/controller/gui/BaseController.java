@@ -170,7 +170,7 @@ public class BaseController {
 		personSelect.getItems().add("Johny");
 		personSelect.getItems().add("Jeff");
 		personSelect.getItems().add("Murali");
-				
+		personSelect.getItems().add("Srikanth");		
 	
 		
 		
@@ -425,6 +425,9 @@ public class BaseController {
                
                else if(t1.equalsIgnoreCase("Murali"))
             	   Constants.PASSWORD = Constants.MURALI_PASS;
+               
+               else if(t1.equalsIgnoreCase("Srikanth"))
+            	   Constants.PASSWORD = Constants.SRI_PASS;
               
                Constants.commandURLMaker();
                

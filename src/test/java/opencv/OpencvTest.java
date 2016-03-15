@@ -3,6 +3,7 @@ package opencv;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,52 +32,25 @@ public class OpencvTest {
 	public static void main(String argv[])
 	{
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-		
 		Image image = RobotLogics.readImageFromFile("Images/Sectors3.png");
 		
-		BufferedImage bi = SwingFXUtils.fromFXImage(image, null);
+//		BufferedImage bi = SwingFXUtils.fromFXImage(image, null);
 		
-		switch(bi.getType())
-		{
-		case BufferedImage.TYPE_3BYTE_BGR:
-											System.out.println();
-											break;
+		File outputFile = new File("Images/Sectors3.png");
+	    BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
+	    
+	    boolean bool;
+	    try {
+	      bool = ImageIO.write(bImage, "png", outputFile);
+	    } catch (IOException e) {
+	      throw new RuntimeException(e);
+	    }
 		
-		case BufferedImage.TYPE_4BYTE_ABGR:
-			System.out.println("4BYTE_ABGR");
-			break;
-
-		case BufferedImage.TYPE_4BYTE_ABGR_PRE:
-			System.out.println("4BYTE_ABGR_PRE");
-			break;
-
-		case BufferedImage.TYPE_BYTE_BINARY:
-			System.out.println("BYTE_BINARY");
-			break;
-
-		case BufferedImage.TYPE_BYTE_GRAY:
-			System.out.println("BYTE_GRAY");
-			break;
-
-		case BufferedImage.TYPE_BYTE_INDEXED:
-			System.out.println("BYTE_INDEXED");
-			break;
-
-		case BufferedImage.TYPE_INT_ARGB:
-			System.out.println("INT_ARGB");
-			break;
-
-		default: System.out.println("Default "+bi.getType());;
-			
-		}
-		
-		
-		
-		Mat mat = new Mat(bi.getHeight(), bi.getWidth(), CvType.CV_8UC1);
+	    Mat mat = new Mat(bImage.getHeight(), bImage.getWidth(), CvType.CV_8UC3);
 	   
     ByteArrayOutputStream s = new ByteArrayOutputStream();
 	try {
-		ImageIO.write(bi, "png", s);
+		ImageIO.write(bImage, "png", s);
 	} catch (IOException e) {
 		
 		e.printStackTrace();
