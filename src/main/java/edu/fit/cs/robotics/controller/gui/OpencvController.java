@@ -15,7 +15,10 @@ import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
+import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
+import org.opencv.core.Rect;
+import org.opencv.core.RotatedRect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -162,11 +165,11 @@ public class OpencvController {
     
     private void loadImage() {
      
-    	cameraFeed = Imgcodecs.imread("Images/Sectors"+count+".png");
+    	cameraFeed = Imgcodecs.imread("Images/Camera"+count+".png");
          
 		Imgproc.cvtColor(cameraFeed, hsv, Imgproc.COLOR_BGR2HSV);
 //		Imgproc.blur(hsv, hsv, new Size(20.0, 20.0));
-		Imgproc.blur(hsv, hsv, new Size(10.0, 10.0));
+		Imgproc.blur(hsv, hsv, new Size(5.0, 5.0));
 //    	cameraFeed.copyTo(hsv);
 //		Core.inRange(hsv, new Scalar(hminSlider.getValue(), sminslider.getValue(), vMinSlider.getValue(), 0), new Scalar(hmaxSlider.getValue(), smaxslider.getValue(), vmaxSlider.getValue(), 0), threshold);
 
@@ -180,6 +183,28 @@ public class OpencvController {
 		
 		
     }
+    
+    
+    private MatOfPoint apprContour(MatOfPoint contour)
+    {
+    	MatOfPoint2f thisContour2f = new MatOfPoint2f();
+	    MatOfPoint approxContour = new MatOfPoint();
+	    MatOfPoint2f approxContour2f = new MatOfPoint2f();
+
+	   contour.convertTo(thisContour2f, CvType.CV_32FC2);
+
+	    
+	    Imgproc.approxPolyDP(thisContour2f, approxContour2f, 50, true);
+
+	    approxContour2f.convertTo(approxContour, CvType.CV_32S);
+	    
+	    
+//	    List<MatOfPoint> apprList = new ArrayList<>();
+//	    apprList.add(approxContour);
+	
+	//    Imgproc.drawContours(temp, apprList	, -1, new Scalar(0, 0, 255));
+	    return  approxContour;
+	}
     
     private void processImage()
     {
@@ -200,16 +225,78 @@ public class OpencvController {
 		List<MatOfPoint> contour = new ArrayList<MatOfPoint>();
 		
 		Mat hierarchy = new Mat();
+		Mat hierarchy_norm = new Mat();
+		
+		Mat newMat = new Mat();
+		threshold.copyTo(newMat);
 		
 		
-//		Imgproc.findContours(threshold, contour, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
-//		Imgproc.drawContours(temp, contour,-1, new Scalar(0,255,0));
+		Imgproc.findContours(newMat, contour, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
+	
+	
+		
+		double con_area = 0;
+		
+		int k = 0;
+		for(int i=0;i<contour.size();i++)
+		{
+			double temp = Imgproc.contourArea(contour.get(i));
+			if(temp > con_area)
+			{	k=i;
+			con_area = temp;
+//			System.out.println(k);
+			}
+		}
+		
+		Imgproc.drawContours(temp, contour,k, new Scalar(0,255,0));
+		
+		MatOfPoint dest = new MatOfPoint();
 		
 		
-		temp.copyTo(hierarchy);
+	//	new Mat(contour.get(k), null);
+		
+	/*	MatOfPoint2f thisContour2f = new MatOfPoint2f();
+	    MatOfPoint approxContour = new MatOfPoint();
+	    MatOfPoint2f approxContour2f = new MatOfPoint2f();
+*/
+	if(contour.size()>0)
+	{
+		MatOfPoint2f thisContour2f = new MatOfPoint2f();
+		contour.get(k).convertTo(thisContour2f, CvType.CV_32FC2);
+		
+		RotatedRect rotateRect = Imgproc.minAreaRect(thisContour2f);
+		
+	
+		
+		List<MatOfPoint> apprList = new ArrayList<>();
+		
+		Point vertices[] = new Point[4];
+		rotateRect.points(vertices);
+		
+		for (int i = 0; i < 4; i++)
+		    Imgproc.line(temp, vertices[i], vertices[(i+1)%4], new Scalar(255,255,0),2);
+		
+//		apprList.add(rotateRect);
+		
+		MatOfPoint tempCont = this.apprContour(contour.get(k));
+			
+		tempCont = this.apprContour(tempCont);
+		apprList.add(tempCont);
 		
 		
-		System.out.println(area);
+		
+		Imgproc.drawContours(temp, apprList	, -1, new Scalar(0, 0, 255));
+		
+		
+	}	
+//		Imgproc.arcLength(contour.get(k), true);
+		
+//		Imgproc.approxPolyDP(contour.get(k), dest, 3.0, true);
+		
+		double thresh = 100;
+		
+		System.out.println("Con Area "+ con_area);
+		System.out.println("Area "+area);
 		
 		if (posX > 0 && posY > 0) {
 		    Imgproc.line(temp, new Point(posX - 5, posY), new Point(posX + 5, posY),
