@@ -167,7 +167,7 @@ public class OpencvController {
     
     private void loadImage() {
      
-    	cameraFeed = Imgcodecs.imread("Images/Camera"+count+".png");
+    	cameraFeed = Imgcodecs.imread("Images/Test"+count+".png");
          
 		Imgproc.cvtColor(cameraFeed, hsv, Imgproc.COLOR_BGR2HSV);
 //		Imgproc.blur(hsv, hsv, new Size(20.0, 20.0));

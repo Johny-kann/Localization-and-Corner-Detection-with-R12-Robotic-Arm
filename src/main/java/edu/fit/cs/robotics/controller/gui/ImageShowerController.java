@@ -63,7 +63,7 @@ public class ImageShowerController {
 	
 	public void ImageMover()
 	{
-Constants.PASSWORD = Constants.JOHNY_PASS;
+Constants.PASSWORD = Constants.MURALI_PASS;
 		
 		Constants.commandURLMaker();
 		

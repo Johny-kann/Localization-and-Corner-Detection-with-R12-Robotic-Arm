@@ -90,39 +90,47 @@ public class ImageController extends Application{
 		sectors[5].command = "11000 10000 8000 -3000 -16000 AJMA";
 		sectors[6].command = "-7000 -9499 -7999 1999 0 AJMA";
 		
-		
+		//Sector 4 corner low
 		sectors[5].quad1_command = "12300 -8000 -2704 -3062 1156 TMOVETO ";
 		sectors[5].quad2_command = "12300 -8000 -904 -4262 1156 TMOVETO ";
 		sectors[5].quad3_command = "12300 -8000 -4 -2462 1156 TMOVETO ";
 		sectors[5].quad4_command = "12300 -8000 -1804 -2162 1156 TMOVETO";
 		
-		sectors[1].quad1_command = "4300 -8000 -3204 3438 1156 TMOVETO";
-		sectors[1].quad2_command = "4300 -8000 -3304 2438 1156 TMOVETO ";
-		sectors[1].quad3_command = "1300 -8000 -1204 2438 1156 TMOVETO";
-		sectors[1].quad4_command = "300 -8000 -1204 3838 1156 TMOVETO";
+		
+		//Sector 2 end
+		sectors[1].quad2_command = "4300 -8000 -3204 3438 1156 TMOVETO";
+		sectors[1].quad3_command = "4300 -8000 -3304 2438 1156 TMOVETO ";
+		sectors[1].quad4_command = "1300 -8000 -1204 2438 1156 TMOVETO";
+		sectors[1].quad1_command = "300 -8000 -1204 3838 1156 TMOVETO";
+		
+		//Sector 2
+		sectors[2].quad2_command = "4300 -8000 -4104 2538 1156 TMOVETO";
+		sectors[2].quad3_command = "4300 -8000 -4204 1538 1156 TMOVETO ";
+		sectors[2].quad4_command = "4300 -8000 -2704 1838 1156 TMOVETO";
+		sectors[2].quad1_command = "4300 -8000 -2704 3638 1156 TMOVETO";
 		
 		
-		sectors[2].quad1_command = "4300 -8000 -4104 2538 1156 TMOVETO";
-		sectors[2].quad2_command = "4300 -8000 -4204 1538 1156 TMOVETO ";
-		sectors[2].quad3_command = "4300 -8000 -2704 1838 1156 TMOVETO";
-		sectors[2].quad4_command = "4300 -8000 -2704 3638 1156 TMOVETO";
-		
-		
-		sectors[3].quad1_command = "8300 -8000 -4104 438 1156 TMOVETO";
+		//Sector 3 middle
+		sectors[3].quad1_command = "8300 -8000 -4404 438 1156 TMOVETO ";
 		sectors[3].quad2_command = "8300 -8000 -4104 -2562 1156 TMOVETO";
 		sectors[3].quad3_command = "8300 -8000 -2104 -2562 1156 TMOVETO";
 		sectors[3].quad4_command = "8300 -8000 -2704 138 1156 TMOVETO ";
 		
-		sectors[4].quad1_command = "12300 -8000 -3904 -2462 1156 TMOVETO";
+		
+		//Sector 4 corner High
+		sectors[4].quad1_command = "12300 -8000 -3304 -3362 1156 TMOVETO";
 		sectors[4].quad2_command = "12300 -8000 -1904 -4462 1156 TMOVETO";
 		sectors[4].quad3_command = "14300 -8000 -304 -4462 1156 TMOVETO";
 		sectors[4].quad4_command = "12300 -8000 -1904 -2462 1156 TMOVETO";
 		
+		
+		//Sector 1 end
 		sectors[0].quad1_command = "4300 -8000 1596 -4562 1156 TMOVETO";
 		sectors[0].quad2_command = "7300 -8000 3396 -3362 1156 TMOVETO";
 		sectors[0].quad3_command = "4300 -8000 2496 -2162 1156 TMOVETO";
 		sectors[0].quad4_command = "4300 -8000 96 -4562 1156 TMOVETO";
 		
+		//Sector 5 left middle
 		sectors[6].quad1_command = "-7000 -8499 -5099 -4001 2000 AJMA";
 		sectors[6].quad2_command = "-5000 -8499 -5099 -4001 -2000 AJMA";
 		sectors[6].quad3_command = "-6000 -8499 -7099 -2001 -1000 AJMA";
@@ -134,7 +142,7 @@ public class ImageController extends Application{
 		count = num;
 		controller.getArm().Capture(num);
 		
-		Image img = controller.getArm().getImageAt(num);
+		Image img = controller.getArm().getLastImage();
 		
 		
 		

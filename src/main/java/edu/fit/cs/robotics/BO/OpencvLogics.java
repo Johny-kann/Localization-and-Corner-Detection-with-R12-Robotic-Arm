@@ -34,6 +34,8 @@ import javafx.scene.image.Image;
 public class OpencvLogics {
 	
 	
+	public static List<MatOfPoint> listConvexHull = new ArrayList<MatOfPoint>();
+	public static List<MatOfPoint> listAppPoly = new ArrayList<MatOfPoint>();
 	public static MatOfPoint convexHull = new MatOfPoint();
 	public static MatOfPoint appPoly = new MatOfPoint();
 	public static Mat Threshold = new Mat();
@@ -88,9 +90,8 @@ public class OpencvLogics {
 		
 		
 	if(contour.size()>0)
-	{
-		findMinArea(cameraFeed, contour.get(k));
-	//	findTriangle(threshold, contour.get(k));
+	{for(int i=0;i<contour.size();i++)
+		findMinArea(cameraFeed, contour.get(i));
 	}	
 		
 		
@@ -136,6 +137,8 @@ public class OpencvLogics {
 //		convexHull.copyTo(hullpt);
 		hullpt.copyTo(convexHull);
 		
+		listConvexHull.add(hullpt);
+		
 	
 //============================================================================		
 		
@@ -143,25 +146,25 @@ public class OpencvLogics {
 
 		contour.convertTo(thisContour2f, CvType.CV_32FC2);
 		
-		RotatedRect rotateRect = Imgproc.minAreaRect(thisContour2f);
+	//	RotatedRect rotateRect = Imgproc.minAreaRect(thisContour2f);
 		
 		List<MatOfPoint> apprList = new ArrayList<>();
 		
-		Point vertices[] = new Point[4];
-		rotateRect.points(vertices);
+//		Point vertices[] = new Point[4];
+//		rotateRect.points(vertices);
 		
-		for (int i = 0; i < 4; i++)
-		    Imgproc.line(cameraFeed, vertices[i], vertices[(i+1)%4], new Scalar(255,255,0),2);
+//		for (int i = 0; i < 4; i++)
+//		    Imgproc.line(cameraFeed, vertices[i], vertices[(i+1)%4], new Scalar(255,255,0),2);
 		
 		MatOfPoint tempCont = OpencvLogics.apprContour(hullpt);
 			
-	
+		
 		tempCont.copyTo(appPoly);
 			
 		apprList.add(tempCont);
 		
 		Imgproc.drawContours(cameraFeed, apprList, -1, new Scalar(0, 0, 255));
-		
+		listAppPoly.add(tempCont);
 	}
 	
 	
@@ -292,7 +295,7 @@ public class OpencvLogics {
 		Mat threshold = new Mat();
 		Point temppt = new Point();
 
-		
+//		Imgproc.convex
 		
 		double area = processImage(CameraFeed, threshold, temppt, Constants.hsvMin2, Constants.hsvMax2);
 		
@@ -303,11 +306,30 @@ public class OpencvLogics {
 		
 		Imgproc.drawContours(CameraFeed, hulList, -1, new Scalar(0,0,0));
 		
-		Imgproc.fillConvexPoly(CameraFeed, appPoly, new Scalar(0,0,0));
+/*		for(int i=0;i<listAppPoly.size();i++)
+		Imgproc.fillConvexPoly(CameraFeed, listAppPoly.get(i), new Scalar(0,0,0));
+	*/
+		
+		MatOfPoint mergedContour = new MatOfPoint();
+		
+		
+		for(int i=0;i<OpencvLogics.listConvexHull.size();i++)
+			mergedContour.push_back(listConvexHull.get(i));
+		
+//		Imgcodecs.
+		MatOfPoint maxContour = findConvexHull(mergedContour);
+		
+		Mat tempCamera = new Mat();
+		CameraFeed.copyTo(tempCamera);
+		
+		Imgproc.fillConvexPoly(tempCamera, maxContour, new Scalar(0,0,0));
 		
 		System.out.println("Main "+ area);
 		Imgcodecs.imwrite("Images/TEST_Main"+".png", CameraFeed);
 		Imgcodecs.imwrite("Images/TEST_Contour"+".png", OpencvLogics.Threshold);
+		
+		
+		Imgcodecs.imwrite("Images/TEST_Big_Hull"+".png", tempCamera);
 		
 		
 		for(int i=0;i<9;i++)
