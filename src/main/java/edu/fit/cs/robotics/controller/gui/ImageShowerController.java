@@ -3,7 +3,10 @@ package edu.fit.cs.robotics.controller.gui;
 import edu.fit.cs.robotics.BO.RobotLogics;
 import edu.fit.cs.robotics.clients.StockClients;
 import edu.fit.cs.robotics.constants.Constants;
+import edu.fit.cs.robotics.controller.ImageController;
 import edu.fit.cs.robotics.controller.RoboticsOperator;
+import edu.fit.cs.robotics.model.images.Sectors;
+import edu.fit.cs.robotics.model.images.Sectors.Region;
 import edu.fit.cs.robotics.threads.ImageService;
 import edu.fit.cs.robotics.threads.RefreshService;
 import javafx.collections.ObservableList;
@@ -39,7 +42,7 @@ public class ImageShowerController {
 	    private Button save;
 
 
-	 
+	public ImageController imageController;
 	
 	private ImageService serviceImage;
 	
@@ -56,6 +59,31 @@ public class ImageShowerController {
 		refreshImage = new RefreshService();
 		
 		initActions();
+	}
+	
+	public void ImageMover()
+	{
+Constants.PASSWORD = Constants.JOHNY_PASS;
+		
+		Constants.commandURLMaker();
+		
+		ImageController control = new ImageController();
+	//	control.initSectors(control.sectors);
+		
+		Sectors maxSector = control.ScanSectors();
+		
+		System.out.println("Area =" + maxSector.area);
+		System.out.println("Command =" + maxSector.command);
+		System.out.println("Name =" + maxSector.name);
+		System.out.println("Centroid =" + maxSector.centroid.x +","+maxSector.centroid.y);
+		
+		System.out.println(maxSector.region);
+	
+//		control.sectors[5].region = Region.quad_4;
+		control.processRegion(maxSector);
+			//	control.sectors[5]);
+	
+		
 	}
 	
 	void initActions()

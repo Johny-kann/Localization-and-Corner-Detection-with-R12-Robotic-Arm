@@ -4,6 +4,9 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -19,18 +22,32 @@ import org.opencv.imgcodecs.Imgcodecs;
 import edu.fit.cs.robotics.BO.OpencvLogics;
 import edu.fit.cs.robotics.BO.RobotLogics;
 import edu.fit.cs.robotics.constants.Constants;
+import edu.fit.cs.robotics.constants.FXMLConstants;
+import edu.fit.cs.robotics.controller.gui.ImageShowerController;
+import edu.fit.cs.robotics.controller.gui.OpencvController;
 import edu.fit.cs.robotics.model.images.Sectors;
 import edu.fit.cs.robotics.model.images.Sectors.Region;
 import javafx.application.Application;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.JavaFXBuilderFactory;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import scala.Array;
 
 public class ImageController extends Application{
 
+	
+	int count;
+	
 	public ImageController()
 	{
 		this.controller = new RoboticsOperator();
+		this.showControl = new ImageShowerController();
+		this.initSectors(sectors);
+		
 	}
 	
 	
@@ -38,10 +55,13 @@ public class ImageController extends Application{
 		super();
 		
 		this.controller = controller;
+		this.showControl = new ImageShowerController();
+		this.initSectors(sectors);
 	}
 
-	Sectors sectors[]= new Sectors[7];
-	RoboticsOperator controller;
+	public Sectors sectors[]= new Sectors[7];
+	public RoboticsOperator controller;
+	public ImageShowerController showControl;
 	
 	
 	
@@ -71,10 +91,10 @@ public class ImageController extends Application{
 		sectors[6].command = "-7000 -9499 -7999 1999 0 AJMA";
 		
 		
-		sectors[5].quad1_command = "12300 -8000 -3004 -2462 1156 TMOVETO ";
-		sectors[5].quad2_command = "12300 -8000 -1804 -3962 1156 TMOVETO ";
-		sectors[5].quad3_command = "12300 -8000 -3904 -2462 1156 TMOVETO";
-		sectors[5].quad4_command = "12300 -8000 -1504 -2162 1156 TMOVETO ";
+		sectors[5].quad1_command = "12300 -8000 -2704 -3062 1156 TMOVETO ";
+		sectors[5].quad2_command = "12300 -8000 -904 -4262 1156 TMOVETO ";
+		sectors[5].quad3_command = "12300 -8000 -4 -2462 1156 TMOVETO ";
+		sectors[5].quad4_command = "12300 -8000 -1804 -2162 1156 TMOVETO";
 		
 		sectors[1].quad1_command = "4300 -8000 -3204 3438 1156 TMOVETO";
 		sectors[1].quad2_command = "4300 -8000 -3304 2438 1156 TMOVETO ";
@@ -111,10 +131,18 @@ public class ImageController extends Application{
 	
 	private Mat captureImage(String name,int num)
 	{
+		count = num;
 		controller.getArm().Capture(num);
 		
-		RobotLogics.writeImagePng(name, controller.getArm().getImageAt(num));
+		Image img = controller.getArm().getImageAt(num);
 		
+		
+		
+		
+		RobotLogics.writeImagePng(name,img); 
+//				controller.getArm().getImageAt(num));
+
+//		showControl.addImages(RobotLogics.readImageFromFile(name));
 		
 		Mat mat = Imgcodecs.imread(name);
 		
@@ -197,7 +225,7 @@ public class ImageController extends Application{
 		return sectors[c];
 	}
 	
-	public static void main1(String[] args)
+/*	public static void main1(String[] args)
 	{
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		
@@ -211,27 +239,10 @@ public class ImageController extends Application{
 	//	control.controller.getArm().issueCommand(control.sectors[0].command);
 	//	control.ScanSector(control.sectors[0], "process");
 	}
+	*/
+
 	
-/*	public static void main1(String[] args) {
-		
-		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-		
-		Constants.PASSWORD = Constants.MURALI_PASS;
-		
-		Constants.commandURLMaker();
-		
-		
-		ImageController control = new ImageController();
-		control.initSectors(control.sectors);
-		
-		Sectors maxSector = control.ScanSectors();
-		
-		System.out.println(maxSector.region);
-		
-	}
-*/
-	
-	void processRegion(Sectors sector)
+	public void processRegion(Sectors sector)
 	{
 		if(sector.region == Region.quad_1)
 			controller.getArm().issueCommand(sector.quad1_command);
@@ -242,16 +253,138 @@ public class ImageController extends Application{
 		else if(sector.region == Region.quad_4)
 			controller.getArm().issueCommand(sector.quad4_command);
 		
-//		if(sector.pr)
+		Region temp = sector.region;
+		
+		count++;
+		controller.getArm().Capture(count);
+		
+		Image img = controller.getArm().getLastImage();
+		
+		System.out.println("Writing Image");
+		
+		Mat tempMat = OpencvLogics.imgToMat(img, "Deg"+count+".png");
+		
+		
+		List<Region> array = new ArrayList<Region>();
+		
+		{
+			if(sector.region != Region.quad_1)
+			{
+				array.add(Region.quad_1);
+			}
+			
+			if(sector.region != Region.quad_2)
+			{
+				array.add(Region.quad_2);
+			}
+			
+			if(sector.region != Region.quad_3)
+			{
+				array.add(Region.quad_3);
+			}
+			
+			if(sector.region != Region.quad_4)
+			{
+				array.add(Region.quad_4);
+			}
+			
+		}
+		
+		double area = OpencvLogics.processImage(tempMat, new Mat(), new Point(), Constants.hsvMin, Constants.hsvMax);
+		System.out.println(area);
+			//	findCentroid(tempMat, new Point());
+		if(Double.compare(area, 20000)== -1)
+		{
+			for(int i=0;i<array.size();i++)
+			{
+				if(array.get(i) == Region.quad_1)
+				{
+					controller.getArm().issueCommand(sector.quad1_command);
+				}
+				else if(array.get(i) == Region.quad_2)
+				{
+					controller.getArm().issueCommand(sector.quad2_command);
+				}
+				else if(array.get(i) == Region.quad_3)
+				{
+					controller.getArm().issueCommand(sector.quad3_command);
+				}
+				else if(array.get(i) == Region.quad_4)
+				{
+					controller.getArm().issueCommand(sector.quad4_command);
+				}
+			
+			
+		//	for(int i =0;i<array.size();i++)
+		//	{	
+				count++;
+				controller.getArm().Capture(count);
+				
+				img = controller.getArm().getLastImage();
+				
+				tempMat = OpencvLogics.imgToMat(img, "Deg"+count+".png");
+				
+				area = OpencvLogics.processImage(tempMat, new Mat(), new Point(), Constants.hsvMin, Constants.hsvMax);
+				System.out.println(area);
+				
+				if(Double.compare(area, 20000.0)==1)
+				{
+					sector.region = array.get(i);
+					System.out.println(sector.region);
+					break;
+				}
+			}
+		}
+		
+	}
+	
+	
+	public void initGUI(Stage primaryStage) throws IOException
+	{
+		FXMLLoader loader = new FXMLLoader();
+		
+		loader.setBuilderFactory(new JavaFXBuilderFactory());
+		
+		URL location = getClass().getResource(FXMLConstants.IMAGE_FXML);
+	
+		FXMLLoader fxmlLoader = new FXMLLoader();
+		
+		fxmlLoader.setLocation(location);
+		
+		fxmlLoader.setBuilderFactory(new JavaFXBuilderFactory());
+		
+	   
+		
+		StackPane root2 =  fxmlLoader.load(location.openStream());
+
+		showControl = fxmlLoader.getController();
+		
+		Scene scene = new Scene(root2,800,600,true);
+	
+		primaryStage.setTitle("Johny's Wrapper");
+
+	
+		primaryStage.setScene(scene);
+		
+		primaryStage.show();
+		
+		showControl.imageController = this;
+		
+		showControl.ImageMover();
+		
+		
 	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
 		
-		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+	//	System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		
-		Constants.PASSWORD = Constants.MURALI_PASS;
+		initGUI(primaryStage);
+		
+		
+	/*	Constants.PASSWORD = Constants.JEFFER_PASS;
 		
 		Constants.commandURLMaker();
 		
@@ -269,16 +402,16 @@ public class ImageController extends Application{
 	
 		processRegion(maxSector);
 		
-	
-//		Mat mat = Imgcodecs.imread("Images/process0.png");
-		
-//		System.out.println(mat.size());
+*/
 		
 	}
 	
 	
 	public static void main(String[] args) {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+		
+		
+		
 		launch(args);
 	}
 

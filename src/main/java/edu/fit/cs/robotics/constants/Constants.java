@@ -1,5 +1,7 @@
 package edu.fit.cs.robotics.constants;
 
+import org.opencv.core.Point3;
+
 import edu.fit.cs.robotics.BO.RobotLogics;
 import javafx.geometry.Point3D;
 
@@ -69,6 +71,11 @@ public class Constants {
 	
 	public static int TOP_HAND = -8500;
 	
+	public static Point3 hsvMin = new Point3(78, 151, 64);
+	public static Point3 hsvMax = new Point3(172,233,233);
+	
+	public static Point3 hsvMin2 = new Point3(78, 120, 65);
+	public static Point3 hsvMax2 = new Point3(180,230,226);
 	
 
 	public static void commandURLMaker()

@@ -27,6 +27,7 @@ import org.opencv.imgproc.Moments;
 
 import edu.fit.cs.robotics.BO.OpencvLogics;
 import edu.fit.cs.robotics.BO.RobotLogics;
+import edu.fit.cs.robotics.constants.Constants;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -124,6 +125,7 @@ public class OpencvController {
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 				processImage();
+//				OpencvLogics.processImage(temp, threshold, new Point(), Constants.hsvMin, Constants.hsvMax);
 				paintNormal(resultView, threshold);
 				paintNormal(normalView, temp);
 				paintNormal(hsvView, hsv);
@@ -174,6 +176,7 @@ public class OpencvController {
 //		Core.inRange(hsv, new Scalar(hminSlider.getValue(), sminslider.getValue(), vMinSlider.getValue(), 0), new Scalar(hmaxSlider.getValue(), smaxslider.getValue(), vmaxSlider.getValue(), 0), threshold);
 
 		processImage();
+//		OpencvLogics.processImage(cameraFeed, threshold, new Point(), Constants.hsvMin, Constants.hsvMax);
 		
 		paintNormal(normalView, temp);;
 		
@@ -199,10 +202,6 @@ public class OpencvController {
 	    approxContour2f.convertTo(approxContour, CvType.CV_32S);
 	    
 	    
-//	    List<MatOfPoint> apprList = new ArrayList<>();
-//	    apprList.add(approxContour);
-	
-	//    Imgproc.drawContours(temp, apprList	, -1, new Scalar(0, 0, 255));
 	    return  approxContour;
 	}
     
@@ -278,9 +277,9 @@ public class OpencvController {
 		
 //		apprList.add(rotateRect);
 		
-		MatOfPoint tempCont = this.apprContour(contour.get(k));
+		MatOfPoint tempCont = OpencvLogics.apprContour(contour.get(k));
 			
-		tempCont = this.apprContour(tempCont);
+//		tempCont = this.apprContour(tempCont);
 		apprList.add(tempCont);
 		
 		
