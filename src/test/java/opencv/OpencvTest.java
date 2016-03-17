@@ -78,7 +78,7 @@ public class OpencvTest {
 		
 			System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 			
-			Mat mat = Imgcodecs.imread("Images/Camera91.png");
+			Mat mat = Imgcodecs.imread("Images/Camera23.png");
 			
 			OpencvLogics.findEdge(mat);
 			

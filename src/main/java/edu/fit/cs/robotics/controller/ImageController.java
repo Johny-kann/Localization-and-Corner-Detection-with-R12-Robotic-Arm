@@ -182,7 +182,7 @@ public class ImageController extends Application{
 		Point3 hsvMin = new Point3(78, 151, 64);
 		Point3 hsvMax = new Point3(172,233,233);
 		
-		double area = OpencvLogics.processImage(mat, threshold, point, hsvMin, hsvMax);
+		double area = OpencvLogics.processImage(mat, threshold, point, hsvMin, hsvMax,false);
 		
 //		double area = OpencvLogics.findCentroid(mat, point);
 		
@@ -298,7 +298,7 @@ public class ImageController extends Application{
 			
 		}
 		
-		double area = OpencvLogics.processImage(tempMat, new Mat(), new Point(), Constants.hsvMin, Constants.hsvMax);
+		double area = OpencvLogics.processImage(tempMat, new Mat(), new Point(), Constants.hsvMin, Constants.hsvMax,false);
 		System.out.println(area);
 			//	findCentroid(tempMat, new Point());
 		if(Double.compare(area, 20000)== -1)
@@ -332,7 +332,7 @@ public class ImageController extends Application{
 				
 				tempMat = OpencvLogics.imgToMat(img, "Deg"+count+".png");
 				
-				area = OpencvLogics.processImage(tempMat, new Mat(), new Point(), Constants.hsvMin, Constants.hsvMax);
+				area = OpencvLogics.processImage(tempMat, new Mat(), new Point(), Constants.hsvMin, Constants.hsvMax,false);
 				System.out.println(area);
 				
 				if(Double.compare(area, 20000.0)==1)
