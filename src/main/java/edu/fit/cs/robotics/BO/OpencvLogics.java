@@ -92,7 +92,6 @@ public class OpencvLogics {
 		
 	if(contour.size()>0)
 	{
-//		for(int i=0;i<contour.size();i++)
 		if(loop_All==false)
 			findMinArea(cameraFeed, contour.get(k),loop_All);
 		else
@@ -140,7 +139,7 @@ public class OpencvLogics {
 		
 		hullList.add(hullpt);
 		
-		Imgproc.drawContours(cameraFeed, hullList,-1, new Scalar(0,0,255),2);
+//		Imgproc.drawContours(cameraFeed, hullList,-1, new Scalar(0,0,255),2);
 		
 //		convexHull.copyTo(hullpt);
 		if(loop_All==false)
@@ -166,7 +165,7 @@ public class OpencvLogics {
 			
 		apprList.add(tempCont);
 		
-		Imgproc.drawContours(cameraFeed, apprList, -1, new Scalar(0, 0, 255));
+//		Imgproc.drawContours(cameraFeed, apprList, -1, new Scalar(0, 0, 255));
 		listAppPoly.add(tempCont);
 	}
 	
@@ -183,6 +182,26 @@ public class OpencvLogics {
 	    return point;
 	}
 	
+	public static MatOfPoint findSumConvexHull(Mat cameraFeed,Mat threshold, Point centroid, Point3 hsvMin, Point3 hsvMax)
+	{
+		OpencvLogics.listConvexHull.clear();
+		OpencvLogics.listAppPoly.clear();
+		
+		double area = processImage(cameraFeed, threshold, centroid, hsvMin, hsvMax, true);
+		
+		
+		MatOfPoint mergedContour = new MatOfPoint();
+		
+		
+		for(int i=0;i<OpencvLogics.listConvexHull.size();i++)
+			mergedContour.push_back(listConvexHull.get(i));
+			
+		MatOfPoint maxContour = findConvexHull(mergedContour);
+		
+		MatOfPoint maxPoly = apprContour(maxContour);
+		
+		return maxPoly;
+	}
 	
 	public static MatOfPoint findBigConvexHull(Mat cameraFeed,Mat threshold, Point centroid, Point3 hsvMin, Point3 hsvMax)
 	{
@@ -199,7 +218,6 @@ public class OpencvLogics {
 		for(int i=0;i<hulList.size();i++)
 		{
 			tempArea = Imgproc.contourArea(hulList.get(i));
-//			System.out.println(tempArea);
 			if(tempArea > maxArea)
 			{
 				maxArea = tempArea;
@@ -430,52 +448,24 @@ public class OpencvLogics {
 		Mat threshold = new Mat();
 		Point temppt = new Point();
 
-//		Imgproc.convex
+		
+
+		MatOfPoint maxPoly = null;
+		
+		
+		boolean loop_all = true;
 //==================================================================== Find Big convex Hull		
 		
-	/*	double area = processImage(CameraFeed, threshold, temppt, Constants.hsvMin2, Constants.hsvMax2);
-		
-		
-		List<MatOfPoint> hulList = new ArrayList<>();
-		
-		hulList.add(convexHull);
-		
-		int k=0;
-		double maxArea = 0;
-		double tempArea;
-		for(int i=0;i<hulList.size();i++)
-		{
-			tempArea = Imgproc.contourArea(hulList.get(i));
-			System.out.println(tempArea);
-			if(tempArea > maxArea)
-			{
-				maxArea = tempArea;
-				k = i;
-			}
-		}
-		*/
-		
-		MatOfPoint maxPoly = findBigConvexHull(CameraFeed, threshold, temppt, Constants.hsvMin2, Constants.hsvMax2); 
-		//		apprContour(hulList.get(k));
-		
+		if(!loop_all)
+			maxPoly = findBigConvexHull(CameraFeed, threshold, temppt, Constants.hsvMin2, Constants.hsvMax2); 
+				
 //=================================================================================	
-		
-		MatOfPoint mergedContour = new MatOfPoint();
-		
-		
-/*		for(int i=0;i<OpencvLogics.listConvexHull.size();i++)
-			mergedContour.push_back(listConvexHull.get(i));
-	*/	
-//		Imgcodecs.
-//		MatOfPoint maxContour = findConvexHull(mergedContour);
-		
+		else
+			maxPoly = findSumConvexHull(CameraFeed, threshold, temppt, Constants.hsvMin2, Constants.hsvMax2); 
 		
 		
 		Mat tempCamera = new Mat();
 		CameraFeed.copyTo(tempCamera);
-		
-		
-		
 		
 		Imgproc.fillConvexPoly(tempCamera, maxPoly, new Scalar(0,0,0));
 		

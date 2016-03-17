@@ -392,25 +392,7 @@ public class ImageController extends Application{
 		initGUI(primaryStage);
 		
 		
-	/*	Constants.PASSWORD = Constants.JEFFER_PASS;
-		
-		Constants.commandURLMaker();
-		
-		ImageController control = new ImageController();
-		control.initSectors(control.sectors);
-		
-		Sectors maxSector = control.ScanSectors();
-		
-		System.out.println("Area =" + maxSector.area);
-		System.out.println("Command =" + maxSector.command);
-		System.out.println("Name =" + maxSector.name);
-		System.out.println("Centroid =" + maxSector.centroid.x +","+maxSector.centroid.y);
-		
-		System.out.println(maxSector.region);
 	
-		processRegion(maxSector);
-		
-*/
 		
 	}
 	
