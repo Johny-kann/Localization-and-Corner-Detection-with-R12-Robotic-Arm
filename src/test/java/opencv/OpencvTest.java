@@ -22,6 +22,7 @@ import org.opencv.imgproc.Imgproc;
 
 import edu.fit.cs.robotics.BO.OpencvLogics;
 import edu.fit.cs.robotics.BO.RobotLogics;
+import edu.fit.cs.robotics.model.PhotoGrid;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 
@@ -78,9 +79,15 @@ public class OpencvTest {
 		
 			System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 			
-			Mat mat = Imgcodecs.imread("Images/Now0.png");
+			Mat mat = Imgcodecs.imread("Images/Exec4.png");
 			
-			OpencvLogics.findEdge(mat);
+			PhotoGrid grid = OpencvLogics.findEdge(mat,false);
+			
+			grid.print();
+			
+			System.out.println(RobotLogics.scoreGrid(grid));
+			
+			System.out.println(RobotLogics.pointGrid(grid));
 			
 	//		System.out.println(m.size());
 	}

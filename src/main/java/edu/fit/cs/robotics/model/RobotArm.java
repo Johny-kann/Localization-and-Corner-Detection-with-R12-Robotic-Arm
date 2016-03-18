@@ -1,5 +1,7 @@
 package edu.fit.cs.robotics.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import edu.fit.cs.robotics.BO.ContentAnalyser;
@@ -15,6 +17,8 @@ public class RobotArm {
 	private ContentAnalyser logic;
 	
 	public boolean last_issued_command_success;
+	
+	public List<String> bufferCommands;
 	
 	public String last_command;
 	
@@ -51,6 +55,7 @@ public class RobotArm {
 		
 		last_issued_command_success = false;
 		
+		bufferCommands = new ArrayList<>();
 /*		posZ = 5000;
 		posX = 0;
 		posY = 0;
@@ -82,6 +87,7 @@ public class RobotArm {
 		if(logic.commandSuccess(response))
 		{	
 			this.last_issued_command_success = true;
+			this.bufferCommands.add(this.last_command);
 			this.last_command = logic.commanIssued(response);
 			
 			this.jma.copy(logic.getEquivalentJMA(response));

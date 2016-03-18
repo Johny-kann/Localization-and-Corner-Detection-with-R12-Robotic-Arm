@@ -39,7 +39,7 @@ public class ServiceTest extends Application  {
 	
 			OpencvController test = fxmlLoader.getController();
 			
-			
+			test.fileLoc = "Images/Test_White"+".png";
 		
 			Scene scene = new Scene(root2,800,600,true);
 		

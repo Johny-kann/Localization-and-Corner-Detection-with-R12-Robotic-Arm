@@ -116,6 +116,21 @@ public class OpencvLogics {
 	}
 	
 	
+	public static Mat identifyLight(Mat camera,Point3 hsvMin, Point3 hsvMax)
+	{
+		Mat threshold = new Mat();
+//		processImage(camera,threshold,new Point(),Constants.hsvMin3, Constants.hsvMax3,false);
+		
+		MatOfPoint contour = findBigConvexHull(camera, threshold, new Point(), Constants.hsvMin3, Constants.hsvMax3);
+		
+//		rgb(25, 65, 41)
+//		rgb(31, 81, 51)
+		Imgproc.fillConvexPoly(camera, contour, new Scalar(51,81,31));
+		
+		return camera;
+		
+	}
+	
 	public static void findTriangle(Mat cameraFeed, MatOfPoint contour)
 	{
 		MatOfPoint2f thisContour2f = new MatOfPoint2f();
@@ -284,18 +299,7 @@ public class OpencvLogics {
     
 		Mat mat = new Mat(bi.getHeight(), bi.getWidth(), CvType.CV_8UC3);
    
-    /*    ByteArrayOutputStream s = new ByteArrayOutputStream();
-		try {
-			ImageIO.write(bi, "png", s);
-		} catch (IOException e) {
-			
-			e.printStackTrace();
-		}
-		byte[] data  = s.toByteArray();
-      */  
-        
-        
-        byte[] data = ((DataBufferByte) bi.getRaster().getDataBuffer()).getData();
+         byte[] data = ((DataBufferByte) bi.getRaster().getDataBuffer()).getData();
         mat.put(0, 0, data);
         return mat;
     }
@@ -326,29 +330,27 @@ public class OpencvLogics {
 		return area;
 	}
 	
-	private static boolean pointExists(MatOfPoint apprPoly,int xMin,int xMax,int yMin,int yMax)
+	private static boolean pointExists(MatOfPoint apprPoly,int xMin,int xMax,int yMin,int yMax,int imgxMin,int imgxMax,int imgyMin,int imgyMax)
 	{
-		System.out.println("({"+xMin+","+yMin+"},{"+xMax+","+yMax+"})");
-	
+
 		for(int i=0; i< apprPoly.toArray().length ;i++)
 		{
-			System.out.print(apprPoly.toArray()[i]);
-			
+		
 			Point pt = apprPoly.toArray()[i];
 			
-			if(pt.x > xMin +20 && pt.x < xMax-20 && pt.y > yMin+20 && pt.y < yMax-20)
+			if(pt.x > xMin +20 && pt.x < xMax-20 && pt.y > yMin+20 && pt.y < yMax-20
+				&& pt.x >= imgxMin && pt.x <= imgxMax && pt.y >= imgyMin && pt.y <= imgyMax	)
 			{
-				System.out.println(true);
 				return true;
 			}
 			
 		}
 		
-		System.out.println(false);
+
 		return false;
 	}
 	
-	private static char findGridValue(Mat img, MatOfPoint apprPoly,int num)
+	private static char findGridValue(Mat img, MatOfPoint apprPoly,int num,int colMin,int colMax,int rowMin,int rowMax)
 	{
 	
 		Moments moments = Imgproc.moments(img, true);
@@ -360,27 +362,33 @@ public class OpencvLogics {
 		
 		int intarea = (int)area;
 	
-		int rowMin = num/3 * img.height();
-		int rowMax = (num/3 + 1)* img.height();
+		int imgyMin = num/3 * img.height();
+		int imgyMax = (num/3 + 1)* img.height();
 		
-		int colMin = (num % 3) * img.width();
-		int colMax = (num%3 + 1)*img.width();
+		int imgxMin = (num % 3) * img.width();
+		int imgxMax = (num%3 + 1)*img.width();
 		
+//		System.out.println(intarea);
 		if(intarea >1500 && intarea<20000)
 		{
-			if(pointExists(apprPoly, colMin, colMax,rowMin, rowMax))
+			if(pointExists(apprPoly, colMin, colMax,rowMin, rowMax, imgxMin, imgxMax, imgyMin, imgyMax))
 				value = 'C';
 			else
 				value = 'P';
 			
-		}else if(intarea > 20000)
+		}else if(intarea > 20000 && intarea < 30000)
 		{
-			if(pointExists(apprPoly, colMin, colMax,rowMin, rowMax))
+			if(pointExists(apprPoly, colMin, colMax,rowMin, rowMax, imgxMin, imgxMax, imgyMin, imgyMax))
 				value = 'C';
 			else
 				value = 'F';
 			
-		}else
+		}
+		else if(intarea > 3000)
+		{
+			value = 'F';
+		}
+		else
 		{
 			value = 'E';
 		}
@@ -412,6 +420,11 @@ public class OpencvLogics {
     	
 //    	System.out.println();
     	
+    	int rowMin = 10;
+    	int rowMax = threshold.rows();
+    	
+    	int colMin = 10;
+    	int colMax = threshold.cols();
     
     	
     	for(int i=0;i<3;i++)
@@ -421,7 +434,7 @@ public class OpencvLogics {
     			mattemp = threshold.rowRange(i*(threshold.rows()/3), (i+1)*threshold.rows()/3);
 				mattemp = mattemp.colRange(j*threshold.cols()/3, (j+1)*threshold.cols()/3);
 				
-    			grid.setchar(i, j, findGridValue(mattemp, apprPoly,i*3+j));
+    			grid.setchar(i, j, findGridValue(mattemp, apprPoly,i*3+j,colMin,colMax,rowMin,rowMax));
     		}
     	}
     		
@@ -429,8 +442,11 @@ public class OpencvLogics {
     	return grid;
 	}
 	
-	public static int findEdge(Mat mat)
+	public static PhotoGrid findEdge(Mat mat,boolean loop_all)
 	{
+		Mat white = OpencvLogics.identifyLight(mat, Constants.hsvMin3, Constants.hsvMax3);
+		
+		Imgcodecs.imwrite("Images/Test_White.png", white);
 		
 		Mat grid[] = new Mat[9];
 		
@@ -453,7 +469,7 @@ public class OpencvLogics {
 		MatOfPoint maxPoly = null;
 		
 		
-		boolean loop_all = true;
+//		boolean loop_all = false;
 //==================================================================== Find Big convex Hull		
 		
 		if(!loop_all)
@@ -476,26 +492,7 @@ public class OpencvLogics {
 		
 		Imgcodecs.imwrite("Images/TEST_Big_Hull"+".png", tempCamera);
 		
-		
-/*		for(int i=0;i<9;i++)
-		{
-			CameraFeed = grid[i];
-			threshold = new Mat();
-			temppt = new Point();
-
-			
-			area = processImage(CameraFeed, threshold, temppt, Constants.hsvMin2, Constants.hsvMax2);
-
-	
-			System.out.println("Grid "+i+" "+ area);
-			Imgcodecs.imwrite("Images/Test"+i+".png", CameraFeed);
-	
-		}
-	*/	
-
-		findPhotoGrid(tempCamera,maxPoly).print();
-		
-		return 0;
+		return findPhotoGrid(tempCamera,maxPoly);
 	}
 	
 	

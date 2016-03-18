@@ -74,8 +74,15 @@ public class Constants {
 	public static Point3 hsvMin = new Point3(78, 151, 64);
 	public static Point3 hsvMax = new Point3(172,233,233);
 	
-	public static Point3 hsvMin2 = new Point3(78, 120, 65);
-	public static Point3 hsvMax2 = new Point3(180,230,226);
+	public static Point3 hsvMin4 = new Point3(78, 120, 65);
+	public static Point3 hsvMax4 = new Point3(180,230,226);
+	
+	public static Point3 hsvMin2 = new Point3(70, 104, 65);
+	public static Point3 hsvMax2 = new Point3(173,186,226);
+	
+	public static Point3 hsvMin3 = new Point3(0, 0, 225);
+	public static Point3 hsvMax3 = new Point3(56,20,255);
+	
 	
 
 	public static void commandURLMaker()

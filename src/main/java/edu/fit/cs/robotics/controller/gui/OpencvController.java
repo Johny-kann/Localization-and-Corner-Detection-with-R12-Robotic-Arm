@@ -90,6 +90,8 @@ public class OpencvController {
 
     @FXML
     private Button rightBut;
+    
+    public static String fileLoc;
 
     
     @FXML

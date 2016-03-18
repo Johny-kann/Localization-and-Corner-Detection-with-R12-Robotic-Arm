@@ -19,15 +19,19 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
 
+import edu.fit.cs.robotics.BO.ContentAnalyser;
 import edu.fit.cs.robotics.BO.OpencvLogics;
 import edu.fit.cs.robotics.BO.RobotLogics;
 import edu.fit.cs.robotics.constants.Constants;
 import edu.fit.cs.robotics.constants.FXMLConstants;
 import edu.fit.cs.robotics.controller.gui.ImageShowerController;
+import edu.fit.cs.robotics.controller.gui.Navigator;
 import edu.fit.cs.robotics.controller.gui.OpencvController;
+import edu.fit.cs.robotics.model.PhotoGrid;
 import edu.fit.cs.robotics.model.images.Sectors;
 import edu.fit.cs.robotics.model.images.Sectors.Region;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
@@ -98,10 +102,10 @@ public class ImageController extends Application{
 		
 		
 		//Sector 2 end
-		sectors[1].quad2_command = "4300 -8000 -3204 3438 1156 TMOVETO";
-		sectors[1].quad3_command = "4300 -8000 -3304 2438 1156 TMOVETO ";
-		sectors[1].quad4_command = "1300 -8000 -1204 2438 1156 TMOVETO";
-		sectors[1].quad1_command = "300 -8000 -1204 3838 1156 TMOVETO";
+		sectors[1].quad2_command = "4300 -8000 -3204 3438 556 TMOVETO";
+		sectors[1].quad3_command = "4300 -8000 -3304 2438 556 TMOVETO ";
+		sectors[1].quad4_command = "1300 -8000 -1204 2438 556 TMOVETO";
+		sectors[1].quad1_command = "300 -8000 -1204 3838 556 TMOVETO";
 		
 		//Sector 2
 		sectors[2].quad2_command = "4300 -8000 -4104 2538 1156 TMOVETO";
@@ -111,10 +115,10 @@ public class ImageController extends Application{
 		
 		
 		//Sector 3 middle
-		sectors[3].quad1_command = "8300 -8000 -4404 438 1156 TMOVETO ";
-		sectors[3].quad2_command = "8300 -8000 -4104 -2562 1156 TMOVETO";
-		sectors[3].quad3_command = "8300 -8000 -2104 -2562 1156 TMOVETO";
-		sectors[3].quad4_command = "8300 -8000 -2704 138 1156 TMOVETO ";
+		sectors[3].quad1_command = "8300 -8000 -4404 438 556 TMOVETO ";
+		sectors[3].quad2_command = "8300 -8000 -4104 -2562 556 TMOVETO";
+		sectors[3].quad3_command = "8300 -8000 -2104 -2562 556 TMOVETO";
+		sectors[3].quad4_command = "8300 -8000 -2704 138 556 TMOVETO ";
 		
 		
 		//Sector 4 corner High
@@ -323,8 +327,6 @@ public class ImageController extends Application{
 				}
 			
 			
-		//	for(int i =0;i<array.size();i++)
-		//	{	
 				count++;
 				controller.getArm().Capture(count);
 				
@@ -343,6 +345,76 @@ public class ImageController extends Application{
 				}
 			}
 		}
+		
+		
+		count++;
+		controller.getArm().Capture(count);
+		
+		img = controller.getArm().getLastImage();
+		
+		tempMat = OpencvLogics.imgToMat(img, "Deg"+count+".png");
+		
+		
+		PhotoGrid grid = OpencvLogics.findEdge(tempMat,true);
+		grid.print();
+		
+		
+		int prevScore = RobotLogics.scoreGrid(grid);
+		int xDir = 1,yDir = 1;
+		
+	for(int i=0;i<10;i++)
+	{
+		if(grid.getchar(1, 1)!='C')
+		{
+			Point pt = RobotLogics.pointGrid(grid);
+			
+			int x = (int)(1*pt.x);
+			int y = (int)(1*pt.y);
+			
+			System.out.println(y+","+ x+","+ (int)0);
+			
+			
+			String response = controller.getArm().addPoint(y, x, (int)0);
+			
+			if(!(new ContentAnalyser().commandSuccess(response)))
+			{
+				System.out.println("Command Failed");
+				controller.getArm().addPoint(y, x, (int)0);
+				continue;
+				
+			}
+			
+			count++;
+			controller.getArm().Capture(count);
+			
+			
+			
+			img = controller.getArm().getLastImage();
+				
+			Navigator.imageControl.addImages(img);
+					
+			
+			tempMat = OpencvLogics.imgToMat(img, "Deg"+count+".png");
+			
+			Imgcodecs.imwrite("Images/Exec"+i+".png", tempMat);
+			
+			grid = OpencvLogics.findEdge(tempMat,false);
+			
+			grid.print();
+			
+			int score = RobotLogics.scoreGrid(grid);
+			
+			if(score < prevScore)
+			{
+			//	controller.getArm().issueCommand(controller.getArm().bufferCommands.get(
+				//		controller.getArm().bufferCommands.size()-2));
+			}else
+			{
+				prevScore = score;
+			}
+			
+		}
+	}
 		
 	}
 	
@@ -378,21 +450,15 @@ public class ImageController extends Application{
 		
 		showControl.imageController = this;
 		
-		showControl.ImageMover();
+	//	showControl.ImageMover();
 		
 		
 	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		// TODO Auto-generated method stub
-		
-	//	System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-		
-		initGUI(primaryStage);
-		
-		
 	
+		initGUI(primaryStage);
 		
 	}
 	

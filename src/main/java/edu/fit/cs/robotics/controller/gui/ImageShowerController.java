@@ -63,27 +63,25 @@ public class ImageShowerController {
 	
 	public void ImageMover()
 	{
-Constants.PASSWORD = Constants.JEFFER_PASS;
+Constants.PASSWORD = Constants.MURALI_PASS;
 		
 		Constants.commandURLMaker();
 		
 		ImageController control = new ImageController();
-	//	control.initSectors(control.sectors);
+	
+/*		Sectors maxSector = control.ScanSectors();
 		
-		Sectors maxSector = control.ScanSectors();
-		
-		System.out.println("Area =" + maxSector.area);
-		System.out.println("Command =" + maxSector.command);
+		System.out.println("Area =" + maxSector.area);//s		System.out.println("Command =" + maxSector.command);
 		System.out.println("Name =" + maxSector.name);
 		System.out.println("Centroid =" + maxSector.centroid.x +","+maxSector.centroid.y);
+*/
+		Sectors maxSector = control.sectors[1];
+		maxSector.region = Region.quad_2;
 		
 		System.out.println(maxSector.region);
 	
-//		control.sectors[5].region = Region.quad_4;
 		control.processRegion(maxSector);
-			//	control.sectors[5]);
-	
-		
+
 	}
 	
 	void initActions()
@@ -115,12 +113,14 @@ Constants.PASSWORD = Constants.JEFFER_PASS;
 			public void handle(ActionEvent event) {
 				
 				
-			serviceImage.setUrl(
+	/*		serviceImage.setUrl(
 							Constants.IMAGE_URL+
 						(imageList.getItems().size()+1)+".bmp"
 						);
 				
 				serviceImage.start();
+		*/		
+				ImageMover();
 					
 			}
 		});
@@ -178,7 +178,18 @@ Constants.PASSWORD = Constants.JEFFER_PASS;
 		ImageView temp = new ImageView(image);
 		temp.setFitWidth(Constants.IMAGE_VIEW_WIDTH);
 		temp.setPreserveRatio(true);
-		imageList.getItems().add(temp);
+		
+		try
+		{
+		imageList.
+		getItems().
+		add(temp);
+		}catch(NullPointerException e)
+		{
+		
+			e.printStackTrace();
+		//	imageList.setItems(new ListView(temp);
+		}
 		
 	}
 	
